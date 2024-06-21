@@ -169,12 +169,10 @@ local function generate_btn_list(player, ctx, travelnets)
                     bgcolor = "green"
                 }
                 btn.label = S("[HERE] @1", btn.label)
-            elseif string.sub(tvnet.display_name, 1, 3) == "(P)" then
-                if minetest.is_protected(tvnet.pos, name) then
-                    btn.style = {
-                        bgcolor = "red"
-                    }
-                end
+            elseif string.sub(tvnet.display_name, 1, 3) == "(P)" and minetest.is_protected(tvnet.pos, name) then
+                btn.style = {
+                    bgcolor = "red"
+                }
             else
                 btn.on_event = btn_event_tp_to(tvnet.pos)
             end
