@@ -99,8 +99,8 @@ local function btn_event_tp_to(tp_pos)
                     minetest.swap_node(travelnet.pos, node)
                 end
 
-                local dir  = vector.multiply(minetest.facedir_to_dir(node.param2), -1)
-                local yaw  = minetest.dir_to_yaw(dir)
+                local dir = vector.multiply(minetest.facedir_to_dir(node.param2), -1)
+                local yaw = minetest.dir_to_yaw(dir)
 
                 player:set_look_horizontal(yaw)
                 player:set_look_vertical(math.pi * 10 / 180)
@@ -119,7 +119,7 @@ local function btn_event_tp_to(tp_pos)
                     hud_elem_type = "text",
                     position = { x = 0.5, y = 0.5 },
                     offset = { x = 0, y = 40 },
-                    text = S("Teleporting..."),
+                    text = S("Teleporting to @1...", travelnet.display_name),
                     text_scale = 1,
                     color = 0xFFD700,
                 })
@@ -130,7 +130,8 @@ local function btn_event_tp_to(tp_pos)
                 end
             end
             teleporting[name] = true
-            minetest.chat_send_player(name, minetest.colorize("#FFD700", S("Teleporting...")))
+            minetest.chat_send_player(name,
+                minetest.colorize("#FFD700", S("Teleporting to @1...", travelnet.display_name)))
             emerge_and_teleport(name, travelnet.pos, callback)
             travelnet_redo.gui_tp:close(player)
         else
