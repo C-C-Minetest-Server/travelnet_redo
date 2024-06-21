@@ -87,7 +87,7 @@ local function on_save(player, ctx)
 
     local meta = minetest.get_meta(pos)
     meta:set_string("infotext",
-        S("Travelnet @1 in @2@@@3, rightclcik/tap to teleport.", display_name, network_name, network_owner))
+        S("Travelnet @1 in @2@@@3, rightclick/tap to teleport.", display_name, network_name, network_owner))
 
     logger:action(f("%s set up travelnet at %s, name = %s, network = %s@%s (#%d)",
         name, minetest.pos_to_string(pos), display_name, network_name, network_owner, network_id
