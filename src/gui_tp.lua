@@ -68,9 +68,7 @@ local function emerge_and_teleport(name, pos, callback)
 
         -- Finally do the teleport
         player:set_pos(pos)
-        if callback then
-            callback()
-        end
+        callback()
     end)
 end
 
@@ -102,6 +100,12 @@ local function btn_event_tp_to(tp_pos)
 
                 player:set_look_horizontal(yaw)
                 player:set_look_vertical(math.pi * 10 / 180)
+
+                minetest.sound_play("travelnet_travel", {
+                    pos = travelnet.pos,
+                    gain = 0.75,
+                    max_hear_distance = 10
+                })
             end
             if hud then
                 local hudname = f("tp_%d_%d_%d", travelnet.pos.x, travelnet.pos.y, travelnet.pos.z)
