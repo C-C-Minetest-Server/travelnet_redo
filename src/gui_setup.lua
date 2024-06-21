@@ -145,10 +145,10 @@ travelnet_redo.gui_setup = flow.make_gui(function(player, ctx)
                 S("Assign to network:") .. "\n" ..
                 S("You can have more than one network. If unsure, use \"@1\".",
                     travelnet_redo.settings.default_network),
-            default = travelnet_redo.settings.default_network,
         },
         gui.Field {
             name = "network_name",
+            default = travelnet_redo.settings.default_network,
         },
 
         gui.Label {
