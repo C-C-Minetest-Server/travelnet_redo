@@ -133,7 +133,7 @@ travelnet_redo.gui_setup = flow.make_gui(function(player, ctx)
 
         gui.Label {
             label =
-                S("Name of this station, prepend \"(P)\" to protect this station: ") .. "\n" ..
+                S("Name of this station, prepend \"(P)\" to protect this station:") .. "\n" ..
                 S("What do you call this place here? Example: \"my first house\", \"mine\", \"shop\"..."),
         },
         gui.Field {

@@ -1,0 +1,67 @@
+# textdomain: travelnet_redo
+
+##[ src/chatcommand.lua ]##
+<network id>=
+Set a network to be always cached=
+Invalid network ID!=
+Network #@1 not found.=
+Successfully set network @1@@@2 (#@3) to be always cached.=
+Set a network to no longer be always cached=
+Successfully set network @1@@@2 (#@3) to no longer be always cached.=
+
+##[ src/gui_setup.lua ]##
+Display name not given=
+Network name not given=
+Length of display name cannot exceed 40=
+Length of network name cannot exceed 40=
+Insufficant privilege to attach travelnets!=
+Length of owner name cannot exceed 20=
+Travelnet of the same name already exists=
+Travelnet @1 in @2@@@3, rightclcik/tap to teleport.=
+Configure this travelnet station=
+Name of this station, prepend "(P)" to protect this station:=
+What do you call this place here? Example: "my first house", "mine", "shop"...=
+Assign to network:=
+You can have more than one network. If unsure, use "@1".=
+Owned by:=
+Unless you know what you are doing, leave this as is.=
+Save=
+
+##[ src/gui_setup.lua ]##
+##[ src/gui_tp.lua ]##
+Exit=
+
+##[ src/gui_tp.lua ]##
+Travelnet @1: Position protected!=
+Teleporting...=
+Travelnet @1: Not Found!=
+[HERE] @1=
+Travelnet-box Teleport Interface=
+Name of this travelnet: @1=
+Network attached: @1@@@2 (#@3)=
+Click or tap on the destion you want to go to.=
+
+##[ src/privs.lua ]##
+allows to attach travelnet boxes to travelnets of other players=
+allows to dig travelnet boxes which belog to nets of other players=
+
+##[ src/travelnet_api.lua ]##
+Unconfigured travelnet, rightclick/tap to configure=
+
+##[ src/travelnet_register.lua ]##
+@1 Travelnet-Box=
+Yellow=
+Red=
+Orange=
+Blue=
+Cyan=
+Green=
+Dark Green=
+Violet=
+Pink=
+Magenta=
+Brown=
+Grey=
+Dark Grey=
+Black=
+White=
