@@ -72,6 +72,7 @@ local function emerge_and_teleport(name, pos, callback)
     end)
 end
 
+local teleporting = {}
 local function btn_event_tp_to(tp_pos)
     return function(player, ctx)
         local hash = minetest.hash_node_position(tp_pos)
@@ -79,7 +80,10 @@ local function btn_event_tp_to(tp_pos)
         local travelnet = network.travelnets[hash]
         if travelnet then
             local name = player:get_player_name()
-            if string.sub(travelnet.display_name, 1, 3) == "(P)" then
+            if teleporting[name] then
+                ctx.errmsg = S("Too fast!")
+                return true
+            elseif string.sub(travelnet.display_name, 1, 3) == "(P)" then
                 if minetest.is_protected(travelnet.pos, name) then
                     minetest.record_protection_violation(travelnet.pos, name)
                     ctx.errmsg = S("Travelnet @1: Position protected!", travelnet.display_name)
@@ -106,6 +110,8 @@ local function btn_event_tp_to(tp_pos)
                     gain = 0.75,
                     max_hear_distance = 10
                 })
+
+                teleporting[name] = nil
             end
             if hud then
                 local hudname = f("tp_%d_%d_%d", travelnet.pos.x, travelnet.pos.y, travelnet.pos.z)
@@ -123,6 +129,7 @@ local function btn_event_tp_to(tp_pos)
                     hud:remove(player, hudname)
                 end
             end
+            teleporting[name] = true
             minetest.chat_send_player(name, minetest.colorize("#FFD700", S("Teleporting...")))
             emerge_and_teleport(name, travelnet.pos, callback)
             travelnet_redo.gui_tp:close(player)
@@ -132,6 +139,11 @@ local function btn_event_tp_to(tp_pos)
         end
     end
 end
+
+minetest.register_on_leaveplayer(function(player)
+    local name = player:get_player_name()
+    teleporting[name] = nil
+end)
 
 -- Height: 8 btns; Width 3 btns
 -- Within 8 btns: center
