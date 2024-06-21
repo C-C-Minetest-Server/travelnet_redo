@@ -19,9 +19,9 @@ local node_box = {
     }
 }
 
-function travelnet_redo.register_default_travelnet(name, color, light)
+function travelnet_redo.register_default_travelnet(name, description, color, light)
     travelnet_redo.register_travelnet(name, {
-        description = S("Travelnet-Box"),
+        description = description,
         drawtype = "mesh",
         mesh = "travelnet.obj",
         sunlight_propagates = true,
@@ -130,7 +130,7 @@ local default_travelnets = {
 }
 
 for name, cfg in pairs(default_travelnets) do
-    travelnet_redo.register_default_travelnet(name, cfg.color, cfg.light)
+    travelnet_redo.register_default_travelnet(name, cfg.description, cfg.color, cfg.light)
 
     if cfg.dye then
         minetest.register_craft({
