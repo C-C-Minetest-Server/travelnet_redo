@@ -53,3 +53,14 @@ minetest.register_chatcommand("tvnet_unset_always_cache", {
             network.network_name, network.network_owner, network_id)
     end
 })
+
+minetest.register_chatcommand("tvnet_sync_ndb", {
+    param = S("<network id>"),
+    privs = { server = true },
+    description = S("Sync travelnets with the node database"),
+    func = function()
+        local restored, removed, time = travelnet_redo.sync_ndb()
+        return true, S("Travelnet node database synchronized. (Restored @1, removed @2, used @3 ms)",
+            restored, removed, math.floor(time * 1000))
+    end
+})

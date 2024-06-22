@@ -6,6 +6,7 @@
 
 local _int = travelnet_redo.internal
 local logger = _int.logger:sublogger("db_api")
+local S = _int.S
 local _db = _int.database
 local settings = travelnet_redo.settings
 
@@ -240,6 +241,7 @@ function travelnet_redo.remove_travelnet(pos, network_id)
             minetest.pos_to_string(pos), err))
     end
 
+    meta:set_string("infotext", S("Unconfigured travelnet, rightclick/tap to configure"))
     meta:set_string("travelnet_redo_configured", "")
     meta:set_string("display_name", "")
     meta:set_int("network_id", 0)
@@ -330,6 +332,47 @@ function travelnet_redo.can_edit_travelnet(pos, name)
         return false
     end
     return true
+end
+
+---Sync from the node DB to the map
+---If an existing travelnet is having wrong network: write data to that travelnet
+---If a missing travelnet is in the DB: remove from the DB
+function travelnet_redo.sync_ndb()
+    local t1 = os.clock()
+
+    local restored, removed = 0, 0
+    local res, err = _int.query(
+        "SELECT tvnet_pos_hash, tvnet_display_name, tvnet_network_id " ..
+        "FROM travelnet_redo_travelnets;")
+    if not res then
+        logger:raise("Failed to sync node DB: %s", err)
+    end
+
+    for _, travelnet in ipairs(res) do
+        local pos = minetest.get_position_from_hash(travelnet.tvnet_pos_hash)
+        local node = minetest.get_node(pos)
+        local node_def = minetest.registered_nodes[node.name]
+        if node_def and node_def.groups and node_def.groups.travelnet_redo == 1 then
+            local map_travelnet = travelnet_redo.get_travelnet_from_map(pos)
+            local meta = minetest.get_meta(pos)
+            if not map_travelnet
+            or map_travelnet.network_id ~= travelnet.tvnet_network_id
+            or map_travelnet.display_name ~= travelnet.tvnet_display_name then
+                local network = travelnet_redo.get_network(travelnet.tvnet_network_id)
+                restored = restored + 1
+                meta:set_string("infotext",
+                    S("Travelnet @1 in @2@@@3, rightclick/tap to teleport.",
+                    travelnet.tvnet_display_name, network.network_name, network.network_owner))
+                meta:set_string("travelnet_redo_configured", "1")
+                meta:set_string("display_name", travelnet.tvnet_display_name)
+                meta:set_int("network_id", travelnet.tvnet_network_id)
+            end
+        else
+            removed = removed + 1
+            travelnet_redo.remove_travelnet(pos, travelnet.tvnet_network_id)
+        end
+    end
+    return restored, removed, os.clock() - t1
 end
 
 modlib.minetest.register_globalstep(59 + math.random(), function()

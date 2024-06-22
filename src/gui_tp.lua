@@ -251,11 +251,11 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                 expand = true, align_h = "left",
             },
             travelnet_redo.can_edit_travelnet(pos, name) and gui.Button {
-                w = 1, h = 1.2,
+                w = 1, h = 0.8,
                 label = S("Edit"),
                 on_event = function(e_player, e_ctx)
-                    local name = e_player:get_player_name()
-                    if not travelnet_redo.can_edit_travelnet(e_ctx.pos, name) then
+                    local e_name = e_player:get_player_name()
+                    if not travelnet_redo.can_edit_travelnet(e_ctx.pos, e_name) then
                         ctx.errmsg = S("You can't edit this travelnet.")
                     end
 
@@ -264,7 +264,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                 end,
             } or gui.Nil{},
             gui.ButtonExit {
-                w = 1, h = 1.2,
+                w = 1, h = 0.8,
                 label = S("Exit"),
             },
         },
