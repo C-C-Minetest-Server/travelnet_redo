@@ -221,7 +221,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
         return simple_error("Attempt to run gui_tp without position")
     end
     local pos = ctx.pos
-
+    local name = player:get_player_name(0)
     local this = travelnet_redo.get_travelnet_from_map(pos)
     if not this then
         return simple_error("Attempt to run gui_tp on unconfigured travelnet")
@@ -230,7 +230,13 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
     local network = travelnet_redo.get_network(this.network_id)
     if not network then
         -- orphaned
-        return simple_error("Orphaned travelnet. Please dig it and set up again.")
+        local meta = minetest.get_meta(pos)
+        meta:set_string("infotext", S("Unconfigured travelnet, rightclick/tap to configure"))
+        meta:set_string("display_name", "")
+        meta:set_int("network_id", 0)
+        meta:set_string("travelnet_redo_configured", "")
+
+        return simple_error("Orphaned travelnet, please set up again.")
     end
 
     local errmsg = ctx.errmsg
@@ -244,8 +250,21 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                 label = S("Travelnet-box Teleport Interface"),
                 expand = true, align_h = "left",
             },
+            travelnet_redo.can_edit_travelnet(pos, name) and gui.Button {
+                w = 1, h = 1.2,
+                label = S("Edit"),
+                on_event = function(e_player, e_ctx)
+                    local name = e_player:get_player_name()
+                    if not travelnet_redo.can_edit_travelnet(e_ctx.pos, name) then
+                        ctx.errmsg = S("You can't edit this travelnet.")
+                    end
+
+                    travelnet_redo.gui_tp:close(e_player)
+                    travelnet_redo.gui_edit:show(e_player, { pos = e_ctx.pos })
+                end,
+            } or gui.Nil{},
             gui.ButtonExit {
-                w = 1, h = 0.5,
+                w = 1, h = 1.2,
                 label = S("Exit"),
             },
         },

@@ -63,13 +63,14 @@ local MP = minetest.get_modpath("travelnet_redo")
 for _, name in ipairs({
 	"settings",
 	"privs",
-	"db",                 -- depends: settings
-	"db_api",             -- depends: db
-	"gui_setup",          -- runtime: db_api, privs, gui_tp
-	"gui_tp",             -- runtime: db_api, privs
-	"travelnet_api",      -- depends: gui_setup, gui_tp
+	"db",              -- depends: settings
+	"db_api",          -- depends: db
+	"gui_setup",       -- runtime: db_api, privs, gui_tp
+	"gui_tp",          -- runtime: db_api, gui_edit, privs
+	"gui_edit",        -- runtime: db_api, gui_tp
+	"travelnet_api",   -- depends: gui_setup, gui_tp
 	"travelnet_register", -- depends: travelnet_api
-	"chatcommand",        -- runtime: db_api
+	"chatcommand",     -- runtime: db_api
 }) do
 	dofile(MP .. DIR_DELIM .. "src" .. DIR_DELIM .. name .. ".lua")
 end

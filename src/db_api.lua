@@ -216,7 +216,7 @@ function travelnet_redo.update_travelnet(pos, display_name, network_id)
     meta:set_int("network_id", network_id)
 
     if cache[network_id] then
-        cache[network_id].travelnet[pos_hash] = {
+        cache[network_id].travelnets[pos_hash] = {
             pos = pos,
             display_name = display_name,
             network_id = network_id,
@@ -240,6 +240,7 @@ function travelnet_redo.remove_travelnet(pos, network_id)
             minetest.pos_to_string(pos), err))
     end
 
+    meta:set_string("travelnet_redo_configured", "")
     meta:set_string("display_name", "")
     meta:set_int("network_id", 0)
 
@@ -323,7 +324,9 @@ function travelnet_redo.can_edit_travelnet(pos, name)
     end
 
     local network = travelnet_redo.get_network(tvnet.network_id)
-    if network and network.network_owner ~= name then
+    if network
+        and network.network_owner ~= name
+        and not minetest.check_player_privs(name, { travelnet_attach = true }) then
         return false
     end
     return true
