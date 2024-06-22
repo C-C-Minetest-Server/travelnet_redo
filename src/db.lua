@@ -25,7 +25,7 @@ end
 do
     local success, err = _int.func_with_IE_env(postgres.connect, postgres)
     if not success then
-        logger:raise(f("Connect to database failed: %s", err))
+        logger:raise("Connect to database failed: %s", err)
     end
 end
 
@@ -37,7 +37,7 @@ do
 
     local res, err = _int.query(q)
     if not res then
-        logger:raise(f("Load initial schema failed: %s", err))
+        logger:raise("Load initial schema failed: %s", err)
     end
 end
 

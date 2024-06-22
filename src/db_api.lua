@@ -10,8 +10,6 @@ local S = _int.S
 local _db = _int.database
 local settings = travelnet_redo.settings
 
-local f = string.format
-
 ---@type { [integer]: travelnet_redo.TravelnetNetwork }
 local cache = {}
 _int.cache = cache
@@ -83,8 +81,8 @@ function travelnet_redo.get_travelnet_by_name_id(display_name, network_id)
     local res, err = _db.get_travelnet_by_name_id(display_name, network_id)
 
     if not res then
-        logger:raise(f("Failed to get travelnet %s@#%d: %s",
-            display_name, network_id, err))
+        logger:raise("Failed to get travelnet %s@#%d: %s",
+            display_name, network_id, err)
     end
 
     if #res == 0 then return nil end
@@ -104,8 +102,8 @@ function travelnet_redo.get_travelnets_in_network(network_id)
     local res, err = _db.get_travelnets_in_network(network_id)
 
     if not res then
-        logger:raise(f("Failed to get travelnets in network %s: %s",
-            network_id, err))
+        logger:raise("Failed to get travelnets in network %s: %s",
+            network_id, err)
     end
 
     local rtn = {}
@@ -129,8 +127,8 @@ function travelnet_redo.get_network(network_id)
     local res, err = _db.get_network_by_id(network_id)
 
     if not res then
-        logger:raise(f("Failed to get network %s: %s",
-            network_id, err))
+        logger:raise("Failed to get network %s: %s",
+            network_id, err)
     end
 
     if #res == 0 then return nil end
@@ -186,8 +184,8 @@ function travelnet_redo.add_travelnet(pos, display_name, network_id, sort_key)
     local res, err = _db.add_travelnet(pos_hash, display_name, network_id, sort_key)
 
     if not res then
-        logger:raise(f("Failed to add travelnet at %s: %s",
-            minetest.pos_to_string(pos), err))
+        logger:raise("Failed to add travelnet at %s: %s",
+            minetest.pos_to_string(pos), err)
     end
 
     local meta = minetest.get_meta(pos)
@@ -219,8 +217,8 @@ function travelnet_redo.update_travelnet(pos, display_name, network_id, sort_key
     local res, err = _db.update_travelnet(pos_hash, display_name, network_id, sort_key)
 
     if not res then
-        logger:raise(f("Failed to update travelnet at %s: %s",
-            minetest.pos_to_string(pos), err))
+        logger:raise("Failed to update travelnet at %s: %s",
+            minetest.pos_to_string(pos), err)
     end
 
     meta:set_string("display_name", display_name)
@@ -241,16 +239,16 @@ end
 function travelnet_redo.remove_travelnet(pos, network_id)
     local meta = minetest.get_meta(pos)
     if meta:get_string("travelnet_redo_configured") == "" then
-        logger:raise(f("Failed to remove travelnet at %s: %s",
-            minetest.pos_to_string(pos), "Calling remove_travelnet on unconfigured travelnet"))
+        logger:raise("Failed to remove travelnet at %s: %s",
+            minetest.pos_to_string(pos), "Calling remove_travelnet on unconfigured travelnet")
     end
 
     local pos_hash = minetest.hash_node_position(pos)
     local res, err = _db.remove_travelnet(pos_hash)
 
     if not res then
-        logger:raise(f("Failed to remove travelnet at %s: %s",
-            minetest.pos_to_string(pos), err))
+        logger:raise("Failed to remove travelnet at %s: %s",
+            minetest.pos_to_string(pos), err)
     end
 
     meta:set_string("infotext", S("Unconfigured travelnet, rightclick/tap to configure"))
@@ -297,8 +295,8 @@ function travelnet_redo.delete_network(network_id)
     local res, err = _db.delete_travelnet_network(network_id)
 
     if not res then
-        logger:raise(f("Failed to delete network %s: %s",
-            network_id, err))
+        logger:raise("Failed to delete network %s: %s",
+            network_id, err)
     end
 
     cache[network_id] = nil
@@ -307,8 +305,8 @@ end
 function travelnet_redo.set_network_always_cache(network_id, always_cache)
     local res, err = _db.set_travelnet_always_cache(network_id, always_cache)
     if not res then
-        logger:raise(f("Failed to set network #%s to always_cache %s: %s",
-            network_id, always_cache and "TRUE" or "FALSE", err))
+        logger:raise("Failed to set network #%s to always_cache %s: %s",
+            network_id, always_cache and "TRUE" or "FALSE", err)
     end
 
     if cache[network_id] then
@@ -414,14 +412,14 @@ modlib.minetest.register_globalstep(59 + math.random(), function()
         )
 
         if not res then
-            logger:raise(f("Failed to list unused travelnet networks: %s", err))
+            logger:raise("Failed to list unused travelnet networks: %s", err)
         end
 
         for _, data in ipairs(res) do
             local network_id = data.network_id
             local d_res, d_err = _db.delete_travelnet_network(network_id)
             if not d_res then
-                logger:raise(f("Failed to delete travelnet network#%d: %s", network_id, d_err))
+                logger:raise("Failed to delete travelnet network#%d: %s", network_id, d_err)
             end
             cache[network_id] = nil
         end

@@ -8,7 +8,6 @@ local _int = travelnet_redo.internal
 local S = _int.S
 local logger = _int.logger:sublogger("gui_setup")
 
-local f = string.format
 local gui = flow.widgets
 
 local function check_can_setup(name, pos)
