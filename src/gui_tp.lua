@@ -276,6 +276,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                     local e_name = e_player:get_player_name()
                     if not travelnet_redo.can_edit_travelnet(e_ctx.pos, e_name) then
                         ctx.errmsg = S("You can't edit this travelnet.")
+                        return true
                     end
 
                     travelnet_redo.gui_tp:close(e_player)
