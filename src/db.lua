@@ -168,7 +168,7 @@ function _db.update_travelnet(pos_hash, display_name, network_id, sort_key)
         "tvnet_network_id = %d, " ..
         "tvnet_sort_key = %d " ..
         "WHERE tvnet_pos_hash = %d;",
-        postgres:escape_literal(display_name), network_id, pos_hash, sort_key))
+        postgres:escape_literal(display_name), network_id, sort_key, pos_hash))
 end
 
 function _db.remove_travelnet(pos_hash)
