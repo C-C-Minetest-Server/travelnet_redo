@@ -165,7 +165,7 @@ function _db.update_travelnet(pos_hash, display_name, network_id, sort_key)
     return _int.query(f(
         "UPDATE travelnet_redo_travelnets " ..
         "SET tvnet_display_name = %s, " ..
-        "tvnet_network_id = %d " ..
+        "tvnet_network_id = %d, " ..
         "tvnet_sort_key = %d " ..
         "WHERE tvnet_pos_hash = %d;",
         postgres:escape_literal(display_name), network_id, pos_hash, sort_key))
