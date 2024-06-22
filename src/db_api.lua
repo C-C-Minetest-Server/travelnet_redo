@@ -157,8 +157,8 @@ function travelnet_redo.get_network_by_name_owner(name, owner)
     local res, err = _db.get_network_by_name_owner(name, owner)
 
     if not res then
-        logger:raise(f("Failed to get network %s@%s: %s",
-            name, owner, err))
+        logger:raise("Failed to get network %s@%s: %s",
+            name, owner, err)
     end
 
     if #res == 0 then return nil end
@@ -209,8 +209,8 @@ function travelnet_redo.update_travelnet(pos, display_name, network_id, sort_key
     sort_key = sort_key or 0
     local meta = minetest.get_meta(pos)
     if meta:get_string("travelnet_redo_configured") == "" then
-        logger:raise(f("Failed to update travelnet at %s: %s",
-            minetest.pos_to_string(pos), "Calling update_travelnet on unconfigured travelnet"))
+        logger:raise("Failed to update travelnet at %s: %s",
+            minetest.pos_to_string(pos), "Calling update_travelnet on unconfigured travelnet")
     end
 
     local pos_hash = minetest.hash_node_position(pos)
@@ -267,8 +267,8 @@ function travelnet_redo.create_network(name, owner)
     local res, err = _db.insert_travelnet_network(name, owner)
 
     if not res then
-        logger:raise(f("Failed to create network %s@%s: %s",
-            name, owner, err))
+        logger:raise("Failed to create network %s@%s: %s",
+            name, owner, err)
     end
 
     cache[res[1].v_network_id] = {
