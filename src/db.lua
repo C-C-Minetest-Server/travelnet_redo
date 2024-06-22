@@ -53,14 +53,14 @@ _int.database = _db
 
 function _db.get_travelnet_by_hash(hash)
     return _int.query(f(
-        "SELECT tvnet_pos_hash, tvnet_display_name, tvnet_network_id " ..
+        "SELECT tvnet_pos_hash, tvnet_display_name, tvnet_network_id, tvnet_sort_key " ..
         "FROM travelnet_redo_travelnets " ..
         "WHERE tvnet_pos_hash = %d;", hash))
 end
 
 function _db.get_travelnet_by_name_id(name, id)
     return _int.query(f(
-        "SELECT tvnet_pos_hash, tvnet_display_name, tvnet_network_id " ..
+        "SELECT tvnet_pos_hash, tvnet_display_name, tvnet_network_id, tvnet_sort_key " ..
         "FROM travelnet_redo_travelnets " ..
         "WHERE tvnet_display_name = %s AND tvnet_network_id = %d;",
         postgres:escape_literal(name), id))
@@ -95,7 +95,8 @@ function _db.get_travelnets_in_network(network_id)
     return _int.query(f(
         "SELECT t.tvnet_pos_hash AS tvnet_pos_hash, " ..
         "t.tvnet_display_name AS tvnet_display_name, " ..
-        "t.tvnet_network_id AS tvnet_network_id " ..
+        "t.tvnet_network_id AS tvnet_network_id, " ..
+        "t.tvnet_sort_key AS tvnet_sort_key " ..
         "FROM travelnet_redo_travelnets AS t " ..
         "JOIN travelnet_redo_networks AS n " ..
         "ON t.tvnet_network_id = n.network_id " ..
@@ -107,6 +108,7 @@ function _db.get_travelnets_in_network_by_name_owner(name, owner)
         "SELECT t.tvnet_pos_hash AS tvnet_pos_hash, " ..
         "t.tvnet_display_name AS tvnet_display_name, " ..
         "t.tvnet_network_id AS tvnet_network_id " ..
+        "t.tvnet_sort_key AS tvnet_sort_key " ..
         "FROM travelnet_redo_travelnets AS t " ..
         "JOIN travelnet_redo_networks AS n " ..
         "ON t.tvnet_network_id = n.network_id " ..
@@ -144,19 +146,22 @@ function _db.delete_travelnet_network_by_name_owner(name, owner)
         postgres:escape_literal(name), postgres:escape_literal(owner)))
 end
 
-function _db.add_travelnet(pos_hash, display_name, network_id)
+function _db.add_travelnet(pos_hash, display_name, network_id, sort_key)
     return _int.query(f(
-        "INSERT INTO travelnet_redo_travelnets (tvnet_pos_hash, tvnet_display_name, tvnet_network_id) " ..
-        "VALUES (%d, %s, %d);",
-        pos_hash, postgres:escape_literal(display_name), network_id))
+        "INSERT INTO travelnet_redo_travelnets " ..
+        "(tvnet_pos_hash, tvnet_display_name, tvnet_network_id, tvnet_sort_key) " ..
+        "VALUES (%d, %s, %d, %d);",
+        pos_hash, postgres:escape_literal(display_name), network_id, sort_key))
 end
 
-function _db.update_travelnet(pos_hash, display_name, network_id)
+function _db.update_travelnet(pos_hash, display_name, network_id, sort_key)
     return _int.query(f(
         "UPDATE travelnet_redo_travelnets " ..
-        "SET tvnet_display_name = %s, tvnet_network_id = %d " ..
+        "SET tvnet_display_name = %s, " ..
+        "tvnet_network_id = %d " ..
+        "tvnet_sort_key = %d " ..
         "WHERE tvnet_pos_hash = %d;",
-        postgres:escape_literal(display_name), network_id, pos_hash))
+        postgres:escape_literal(display_name), network_id, pos_hash, sort_key))
 end
 
 function _db.remove_travelnet(pos_hash)

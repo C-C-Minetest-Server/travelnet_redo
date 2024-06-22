@@ -11,8 +11,12 @@ CREATE TABLE IF NOT EXISTS travelnet_redo_travelnets (
     tvnet_pos_hash BIGINT PRIMARY KEY,
     tvnet_display_name VARCHAR(40) NOT NULL,
     tvnet_network_id BIGINT NOT NULL,
+    tvnet_sort_key SMALLINT NOT NULL DEFAULT 0,
 
     CONSTRAINT fk_tvnet_network_id
         FOREIGN KEY (tvnet_network_id) REFERENCES travelnet_redo_networks (network_id)
         ON DELETE CASCADE
 );
+
+ALTER TABLE travelnet_redo_travelnets
+ADD COLUMN IF NOT EXISTS tvnet_sort_key SMALLINT NOT NULL DEFAULT 0;

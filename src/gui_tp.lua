@@ -23,23 +23,28 @@ local function sort_travelnets(travelnets)
     end
 
     table.sort(rtn, function(a, b)
-        local name_a = a.display_name
-        local name_b = b.display_name
+        print(dump (a))
+        print(dump (b))
+        if a.sort_key  == b.sort_key then
+            local name_a = a.display_name
+            local name_b = b.display_name
 
-        if string.sub(name_a, 1, 3) == "(P)" then
-            name_a = string.sub(name_a, 4)
+            if string.sub(name_a, 1, 3) == "(P)" then
+                name_a = string.sub(name_a, 4)
+            end
+
+            if string.sub(name_b, 1, 3) == "(P)" then
+                name_b = string.sub(name_b, 4)
+            end
+
+            ---@type string
+            name_a = string.trim(name_a)
+            ---@type string
+            name_b = string.trim(name_b)
+
+            return name_a < name_b
         end
-
-        if string.sub(name_b, 1, 3) == "(P)" then
-            name_b = string.sub(name_b, 4)
-        end
-
-        ---@type string
-        name_a = string.trim(name_a)
-        ---@type string
-        name_b = string.trim(name_b)
-
-        return name_a < name_b
+        return a.sort_key < b.sort_key
     end)
 
     return rtn

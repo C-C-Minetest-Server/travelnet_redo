@@ -31,6 +31,7 @@ _int.cache = cache
 ---@field pos vector The position of the travelnet
 ---@field display_name string The display name of the travelnet
 ---@field network_id string The ID of the network ths travelnet belongs to
+---@field sort_key integer The sorting key of the travelnet when showed on gui_tp
 
 ---A table containing data of a travelnet network
 ---@class travelnet_redo.TravelnetNetwork: table
@@ -55,6 +56,7 @@ _int.cache = cache
 --         pos = pos,
 --         display_name = res[1].tvnet_display_name,
 --         network_id = res[1].tvnet_network_id,
+--         sort_key = res[1].tvnet_sort_key,
 --     }
 -- end
 
@@ -71,6 +73,7 @@ function travelnet_redo.get_travelnet_from_map(pos)
         pos = pos,
         display_name = meta:get_string("display_name"),
         network_id = meta:get_int("network_id"),
+        sort_key = meta:get_int("sort_key")
     }
 end
 
@@ -89,7 +92,8 @@ function travelnet_redo.get_travelnet_by_name_id(display_name, network_id)
     return {
         pos = minetest.get_position_from_hash(res[1].tvnet_pos_hash),
         display_name = res[1].tvnet_display_name,
-        network_id = network_id
+        network_id = network_id,
+        sort_key = res[1].tvnet_sort_key,
     }
 end
 
@@ -110,6 +114,7 @@ function travelnet_redo.get_travelnets_in_network(network_id)
             pos = minetest.get_position_from_hash(data.tvnet_pos_hash),
             display_name = data.tvnet_display_name,
             network_id = data.tvnet_network_id,
+            sort_key = data.tvnet_sort_key,
         }
     end
 
@@ -174,9 +179,11 @@ end
 
 -- Write functions
 
-function travelnet_redo.add_travelnet(pos, display_name, network_id)
+function travelnet_redo.add_travelnet(pos, display_name, network_id, sort_key)
+    sort_key = sort_key or 0
+
     local pos_hash = minetest.hash_node_position(pos)
-    local res, err = _db.add_travelnet(pos_hash, display_name, network_id)
+    local res, err = _db.add_travelnet(pos_hash, display_name, network_id, sort_key)
 
     if not res then
         logger:raise(f("Failed to add travelnet at %s: %s",
@@ -187,18 +194,21 @@ function travelnet_redo.add_travelnet(pos, display_name, network_id)
     meta:set_string("travelnet_redo_configured", "1")
     meta:set_string("display_name", display_name)
     meta:set_int("network_id", network_id)
+    meta:set_int("sort_key", sort_key)
 
     if cache[network_id] then
         cache[network_id].travelnets[pos_hash] = {
             pos = pos,
             display_name = display_name,
             network_id = network_id,
+            sort_key = sort_key,
         }
         cache[network_id].last_accessed = os.time()
     end
 end
 
-function travelnet_redo.update_travelnet(pos, display_name, network_id)
+function travelnet_redo.update_travelnet(pos, display_name, network_id, sort_key)
+    sort_key = sort_key or 0
     local meta = minetest.get_meta(pos)
     if meta:get_string("travelnet_redo_configured") == "" then
         logger:raise(f("Failed to update travelnet at %s: %s",
@@ -206,7 +216,7 @@ function travelnet_redo.update_travelnet(pos, display_name, network_id)
     end
 
     local pos_hash = minetest.hash_node_position(pos)
-    local res, err = _db.update_travelnet(pos_hash, display_name, network_id)
+    local res, err = _db.update_travelnet(pos_hash, display_name, network_id, sort_key)
 
     if not res then
         logger:raise(f("Failed to update travelnet at %s: %s",
@@ -215,12 +225,14 @@ function travelnet_redo.update_travelnet(pos, display_name, network_id)
 
     meta:set_string("display_name", display_name)
     meta:set_int("network_id", network_id)
+    meta:set_int("sort_key", sort_key)
 
     if cache[network_id] then
         cache[network_id].travelnets[pos_hash] = {
             pos = pos,
             display_name = display_name,
             network_id = network_id,
+            sort_key = sort_key,
         }
         cache[network_id].last_accessed = os.time()
     end
@@ -245,6 +257,7 @@ function travelnet_redo.remove_travelnet(pos, network_id)
     meta:set_string("travelnet_redo_configured", "")
     meta:set_string("display_name", "")
     meta:set_int("network_id", 0)
+    meta:set_int("sort_key", 0)
 
     if cache[network_id] then
         cache[network_id].travelnets[pos_hash] = nil
@@ -342,7 +355,7 @@ function travelnet_redo.sync_ndb()
 
     local restored, removed = 0, 0
     local res, err = _int.query(
-        "SELECT tvnet_pos_hash, tvnet_display_name, tvnet_network_id " ..
+        "SELECT tvnet_pos_hash, tvnet_display_name, tvnet_network_id, tvnet_sort_key " ..
         "FROM travelnet_redo_travelnets;")
     if not res then
         logger:raise("Failed to sync node DB: %s", err)
@@ -357,7 +370,8 @@ function travelnet_redo.sync_ndb()
             local meta = minetest.get_meta(pos)
             if not map_travelnet
             or map_travelnet.network_id ~= travelnet.tvnet_network_id
-            or map_travelnet.display_name ~= travelnet.tvnet_display_name then
+            or map_travelnet.display_name ~= travelnet.tvnet_display_name
+            or map_travelnet.sort_key ~= travelnet.tvnet_sort_key then
                 local network = travelnet_redo.get_network(travelnet.tvnet_network_id)
                 restored = restored + 1
                 meta:set_string("infotext",
@@ -366,6 +380,7 @@ function travelnet_redo.sync_ndb()
                 meta:set_string("travelnet_redo_configured", "1")
                 meta:set_string("display_name", travelnet.tvnet_display_name)
                 meta:set_int("network_id", travelnet.tvnet_network_id)
+                meta:set_int("sort_key", travelnet.tvnet_sort_key)
             end
         else
             removed = removed + 1

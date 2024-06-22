@@ -52,6 +52,7 @@ local function on_save(player, ctx)
     local display_name  = string.trim(ctx.form.display_name)
     local network_name  = string.trim(ctx.form.network_name)
     local network_owner = string.trim(ctx.form.network_owner)
+    local sort_key      = tonumber(string.trim(ctx.form.sort_key))
 
     if not network_owner or network_owner == "" then
         network_owner = name
@@ -75,6 +76,9 @@ local function on_save(player, ctx)
     elseif string.len(network_owner) > 20 then
         ctx.errmsg = S("Length of owner name cannot exceed 20")
         return true
+    elseif not sort_key or sort_key < -32768 or sort_key > 32767 then
+        ctx.errmsg = S("Invalid sorting key!")
+        return true
     end
 
     local network_id = travelnet_redo.create_or_get_network(network_name, network_owner)
@@ -83,15 +87,15 @@ local function on_save(player, ctx)
         ctx.errmsg = S("Travelnet of the same name already exists")
         return true
     end
-    travelnet_redo.add_travelnet(pos, display_name, network_id)
+    travelnet_redo.add_travelnet(pos, display_name, network_id, sort_key)
 
     local meta = minetest.get_meta(pos)
     meta:set_string("infotext",
         S("Travelnet @1 in @2@@@3, rightclick/tap to teleport.", display_name, network_name, network_owner))
 
-    logger:action(f("%s set up travelnet at %s, name = %s, network = %s@%s (#%d)",
-        name, minetest.pos_to_string(pos), display_name, network_name, network_owner, network_id
-    ))
+    logger:action("%s set up travelnet at %s, name = %s, network = %s@%s (#%d), sort_key = %d",
+        name, minetest.pos_to_string(pos), display_name, network_name, network_owner, network_id, sort_key
+    )
     travelnet_redo.gui_setup:close(player)
     travelnet_redo.gui_tp:show(player, { pos = pos })
 end
@@ -112,7 +116,7 @@ travelnet_redo.gui_setup = flow.make_gui(function(player, ctx)
     ctx.errmsg = nil
 
     return gui.VBox {
-        min_w = 8,
+        min_w = 10,
         -- Header
         gui.HBox {
             gui.Label {
@@ -151,14 +155,33 @@ travelnet_redo.gui_setup = flow.make_gui(function(player, ctx)
             default = travelnet_redo.settings.default_network,
         },
 
-        gui.Label {
-            label =
-                S("Owned by:") .. "\n" ..
-                S("Unless you know what you are doing, leave this as is.")
-        },
-        gui.Field {
-            name = "network_owner",
-            default = name,
+        gui.HBox {
+            gui.VBox {
+                expand = true,
+                gui.Label {
+                    w = 5,
+                    label =
+                        S("Owned by:") .. "\n" ..
+                        S("Unless you know what you are doing, leave this as is.")
+                },
+                gui.Field {
+                    name = "network_owner",
+                    default = name,
+                },
+            },
+            gui.VBox {
+                w = 5,
+                gui.Label {
+                    w = 5,
+                    label =
+                        S("Sort key:") .. "\n" ..
+                        S("Integer defining the order, the smaller the upper.")
+                },
+                gui.Field {
+                    name = "sort_key",
+                    default = "0",
+                },
+            },
         },
 
         gui.HBox {
