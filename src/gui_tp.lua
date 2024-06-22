@@ -84,7 +84,8 @@ local function btn_event_tp_to(tp_pos)
         if travelnet then
             local name = player:get_player_name()
             if teleporting[name] then
-                ctx.errmsg = S("Too fast!")
+                ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+                    S("Too fast!")
                 return true
             elseif string.sub(travelnet.display_name, 1, 3) == "(P)" then
                 if minetest.is_protected(travelnet.pos, name) then
@@ -139,7 +140,8 @@ local function btn_event_tp_to(tp_pos)
             emerge_and_teleport(name, travelnet.pos, callback)
             travelnet_redo.gui_tp:close(player)
         else
-            ctx.errmsg = S("Travelnet @1: Not Found!", travelnet.display_name)
+            ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+                S("Travelnet @1: Not Found!", travelnet.display_name)
             return true
         end
     end
@@ -186,10 +188,20 @@ local function generate_btn_list(player, ctx, travelnets)
                     bgcolor = "green"
                 }
                 btn.label = S("[HERE] @1", btn.label)
+                btn.on_event = function(_, e_ctx)
+                    e_ctx.errmsg = minetest.get_color_escape_sequence("green") ..
+                        S("You are already here!")
+                    return true
+                end
             elseif string.sub(tvnet.display_name, 1, 3) == "(P)" and minetest.is_protected(tvnet.pos, name) then
                 btn.style = {
                     bgcolor = "red",
                 }
+                btn.on_event = function(_, e_ctx)
+                    e_ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+                        S("Can't teleport: Destination protected!")
+                    return true
+                end
             else
                 btn.on_event = btn_event_tp_to(tvnet.pos)
             end
@@ -278,7 +290,8 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                 on_event = function(e_player, e_ctx)
                     local e_name = e_player:get_player_name()
                     if not travelnet_redo.can_edit_travelnet(e_ctx.pos, e_name) then
-                        ctx.errmsg = S("You can't edit this travelnet.")
+                        ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+                            S("You can't edit this travelnet.")
                         return true
                     end
 
@@ -307,13 +320,11 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
         },
         gui.HBox {
             gui.Label {
-                w = 6,
-                label =
-                    errmsg or S("Click or tap on the destion you want to go to."),
-                expand = true, align_h = "left",
+                w = 8, expand = true,
+                label = errmsg or S("Click or tap on the destion you want to go to."),
             },
             gui.Label {
-                w = 6,
+                w = 8, expand = true,
                 label = S("@1Green@2: You are here; @3Red@4: Protected",
                     minetest.get_color_escape_sequence("green"),
                     minetest.get_color_escape_sequence("white"),
