@@ -86,7 +86,8 @@ local function btn_event_tp_to(tp_pos)
             elseif string.sub(travelnet.display_name, 1, 3) == "(P)" then
                 if minetest.is_protected(travelnet.pos, name) then
                     minetest.record_protection_violation(travelnet.pos, name)
-                    ctx.errmsg = S("Travelnet @1: Position protected!", travelnet.display_name)
+                    ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+                        S("Travelnet @1: Position protected!", travelnet.display_name)
                     return true
                 end
             end
@@ -184,7 +185,7 @@ local function generate_btn_list(player, ctx, travelnets)
                 btn.label = S("[HERE] @1", btn.label)
             elseif string.sub(tvnet.display_name, 1, 3) == "(P)" and minetest.is_protected(tvnet.pos, name) then
                 btn.style = {
-                    bgcolor = "red"
+                    bgcolor = "red",
                 }
             else
                 btn.on_event = btn_event_tp_to(tvnet.pos)
@@ -236,7 +237,25 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
         meta:set_int("network_id", 0)
         meta:set_string("travelnet_redo_configured", "")
 
-        return simple_error("Orphaned travelnet, please set up again.")
+        return gui.VBox {
+            gui.Label {
+                label = S("This travelnet is orphaned. Please set up again."),
+            },
+            gui.HBox {
+                gui.Button {
+                    label = S("Setup"),
+                    expand = true,
+                    on_event = function(e_player, e_ctx)
+                        travelnet_redo.gui_tp:close(e_player)
+                        travelnet_redo.gui_setup:show(e_player, { pos = e_ctx.pos })
+                    end,
+                },
+                gui.ButtonExit {
+                    label = S("Exit"),
+                    expand = true,
+                },
+            }
+        }
     end
 
     local errmsg = ctx.errmsg
@@ -282,9 +301,21 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                 expand = true,
             },
         },
-        gui.Label {
-            w = 10,
-            label = errmsg and minetest.colorize("red", errmsg) or S("Click or tap on the destion you want to go to.")
+        gui.HBox {
+            gui.Label {
+                w = 6,
+                label =
+                    errmsg or S("Click or tap on the destion you want to go to."),
+                expand = true, align_h = "left",
+            },
+            gui.Label {
+                w = 6,
+                label = S("@1Green@2: You are here; @3Red@4: Protected",
+                    minetest.get_color_escape_sequence("green"),
+                    minetest.get_color_escape_sequence("white"),
+                    minetest.get_color_escape_sequence("red"),
+                    minetest.get_color_escape_sequence("white"))
+            }
         },
         generate_btn_list(player, ctx, network.travelnets)
     }
