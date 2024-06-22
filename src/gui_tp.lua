@@ -265,7 +265,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
     ctx.errmsg = nil
 
     return gui.VBox {
-        min_w = 18, min_h = 10.5,
+        min_w = 18, min_h = 11.5,
         gui.HBox {
             gui.Label {
                 w = 10, h = 0.5,
