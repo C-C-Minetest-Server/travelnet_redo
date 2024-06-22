@@ -316,6 +316,18 @@ function travelnet_redo.set_network_always_cache(network_id, always_cache)
     end
 end
 
+function travelnet_redo.change_network_owner(network_id, name)
+    local res, err = _db.change_network_owner(network_id, name)
+    if not res then
+        logger:raise("Failed to transfer network #%s to %s: %s",
+            network_id, name, err)
+    end
+
+    if cache[network_id] then
+        cache[network_id].network_owner = name
+    end
+end
+
 -- Helper functions
 
 function travelnet_redo.can_edit_travelnet(pos, name)
@@ -378,7 +390,7 @@ function travelnet_redo.sync_ndb()
                     S("Travelnet @1 in @2@@@3, rightclick/tap to teleport.",
                     travelnet.tvnet_display_name, network.network_name, network.network_owner))
                 meta:set_string("travelnet_redo_configured", "1")
-                meta:set_string("display_name", travelnet.tvnet_display_name)
+                meta:set_string("network_owner", travelnet.tvnet_display_name)
                 meta:set_int("network_id", travelnet.tvnet_network_id)
                 meta:set_int("sort_key", travelnet.tvnet_sort_key)
             end

@@ -70,7 +70,7 @@ for _, name in ipairs({
 	"gui_edit",        -- runtime: db_api, gui_tp
 	"travelnet_api",   -- depends: gui_setup, gui_tp
 	"travelnet_register", -- depends: travelnet_api
-	"chatcommand",     -- runtime: db_api
+	"chatcommand",     -- runtime: privs, db_api
 }) do
 	dofile(MP .. DIR_DELIM .. "src" .. DIR_DELIM .. name .. ".lua")
 end

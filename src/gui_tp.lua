@@ -23,8 +23,6 @@ local function sort_travelnets(travelnets)
     end
 
     table.sort(rtn, function(a, b)
-        print(dump (a))
-        print(dump (b))
         if a.sort_key  == b.sort_key then
             local name_a = a.display_name
             local name_b = b.display_name

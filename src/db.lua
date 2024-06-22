@@ -126,6 +126,13 @@ function _db.insert_travelnet_network(name, owner)
         postgres:escape_literal(name), postgres:escape_literal(owner)))
 end
 
+function _db.change_network_owner(network_id, name)
+    return _int.query(f(
+        "UPDATE travelnet_redo_networks " ..
+        "SET network_owner = %s " ..
+        "WHERE network_id = %d;", postgres:escape_literal(name), network_id))
+end
+
 function _db.set_travelnet_always_cache(network_id, always_cache)
     return _int.query(f(
         "UPDATE travelnet_redo_networks " ..
