@@ -63,7 +63,7 @@ end
 
 travelnet_redo.gui_attribution = flow.make_gui(function(_, ctx)
     return gui.VBox {
-        min_w = 10,
+        min_w = 20,
         -- Header
         gui.HBox {
             gui.Label {
