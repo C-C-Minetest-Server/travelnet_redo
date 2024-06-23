@@ -56,12 +56,12 @@ do
         full_text = file:read("*a")
         file:close()
     else
-        logging:error("Error reading license text. The GPL text will not be avaliable in-game.")
+        logger:error("Error reading license text. The GPL text will not be avaliable in-game.")
         full_text = S("Error reading license text. For full text, see <https://www.gnu.org/licenses/>.")
     end
 end
 
-travelnet_redo.gui_attribution = flow.make_gui(function(player, ctx)
+travelnet_redo.gui_attribution = flow.make_gui(function(_, ctx)
     return gui.VBox {
         min_w = 10,
         -- Header
