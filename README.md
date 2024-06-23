@@ -7,8 +7,7 @@ This is a rewrite of the original Travelnet mod, using PostgreSQL as the storage
 * **This mod is not a drop-in replacement of the original Trevelnet mod.** Contributions are welcomed, but I don't plan writing migration scripts.
 * Elevators are not included. This is mainly my personal choice - use more realistic elevators, they are not bad.
 * Punching the travelnet no longer update it. Instead, they are always up-to-date, and a cache system ensures the robustness of displays.
-* You cannot modify existing travelnets. Instead, remove it and place again.
-* The number of travelnets in a network is no longer limited to 24. Though packedm, the system properly handles the display of >24 travelnets.
+* The number of travelnets in a network is no longer limited to 24. Though packed, the system properly handles the display of >24 travelnets.
 
 ## Installation
 
