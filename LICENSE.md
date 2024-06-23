@@ -25,5 +25,7 @@ and are provided under the [CC0](https://creativecommons.org/publicdomain/zero/1
 
 Exceptions:
 
-* `textures/travelnet_top.png` [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) https://github.com/minetest/minetest_game (`default_steel_block.png`)
-* `textures/travelnet_bottom.png` [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) https://github.com/minetest/minetest_game (`default_clay.png`)
+* `textures/travelnet_top.png` [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) from [Minetest Game][MTG] (`default_steel_block.png`)
+* `textures/travelnet_bottom.png` [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) from [Minetest Game][MTG] (`default_clay.png`)
+
+[MTG]: https://github.com/minetest/minetest_game
