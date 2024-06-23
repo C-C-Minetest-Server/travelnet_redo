@@ -13,6 +13,8 @@ local hud = minetest.global_exists("mhud") and mhud.init()
 
 local f = string.format
 local lower = string.lower
+local sub = string.sub
+local trim = string.trim
 
 ---@param travelnets { [integer]: travelnet_redo.Travelnet }
 ---@return travelnet_redo.Travelnet[]
@@ -28,18 +30,18 @@ local function sort_travelnets(travelnets)
             local name_a = lower(a.display_name)
             local name_b = lower(b.display_name)
 
-            if string.sub(name_a, 1, 3) == "(p)" then
-                name_a = string.sub(name_a, 4)
+            if sub(name_a, 1, 3) == "(p)" then
+                name_a = sub(name_a, 4)
             end
 
-            if string.sub(name_b, 1, 3) == "(p)" then
-                name_b = string.sub(name_b, 4)
+            if sub(name_b, 1, 3) == "(p)" then
+                name_b = sub(name_b, 4)
             end
 
             ---@type string
-            name_a = string.trim(name_a)
+            name_a = trim(name_a)
             ---@type string
-            name_b = string.trim(name_b)
+            name_b = trim(name_b)
 
             return name_a < name_b
         end
