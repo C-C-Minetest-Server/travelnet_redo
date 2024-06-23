@@ -32,8 +32,11 @@ luarocks install luasocket
 After installing, configure the following in your `minetest.conf` (see [`pgmoon.new`](https://github.com/leafo/pgmoon#newoptions) for full options list):
 
 ```text
+# We need insecure environment access
 secure.trusted_mods = travelnet_redo
+
+# Note that this differs from backend definitions in world.mt
 travelnet_redo.pg_connection = database=minetest host=127.0.0.1 port=5432 user=minetest password=password
 ```
 
-Of course, confgure your PostgreSQL server accordingly.
+Of course, configure your PostgreSQL server accordingly. You can safely share the same database with all Minetest storage.
