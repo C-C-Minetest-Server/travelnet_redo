@@ -12,6 +12,7 @@ local gui = flow.widgets
 local hud = minetest.global_exists("mhud") and mhud.init()
 
 local f = string.format
+local lower = string.lower
 
 ---@param travelnets { [integer]: travelnet_redo.Travelnet }
 ---@return travelnet_redo.Travelnet[]
@@ -24,14 +25,14 @@ local function sort_travelnets(travelnets)
 
     table.sort(rtn, function(a, b)
         if a.sort_key  == b.sort_key then
-            local name_a = a.display_name
-            local name_b = b.display_name
+            local name_a = lower(a.display_name)
+            local name_b = lower(b.display_name)
 
-            if string.sub(name_a, 1, 3) == "(P)" then
+            if string.sub(name_a, 1, 3) == "(p)" then
                 name_a = string.sub(name_a, 4)
             end
 
-            if string.sub(name_b, 1, 3) == "(P)" then
+            if string.sub(name_b, 1, 3) == "(p)" then
                 name_b = string.sub(name_b, 4)
             end
 
