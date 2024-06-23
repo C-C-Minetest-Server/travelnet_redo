@@ -14,7 +14,7 @@ This is a rewrite of the [original Travelnet mod](https://content.minetest.net/p
 ## Changes
 
 * **This mod is not a drop-in replacement of the original Trevelnet mod.** Contributions are welcomed, but I don't plan to write migration scripts.
-* Elevators are not included. This is mainly my personal choice - use more realistic elevators, they are not bad.
+* Elevators are not included. This is mainly my personal choice - use [more realistic elevators](https://content.minetest.net/packages/shacknetisp/elevator/), they are not bad.
 * Punching the travelnet no longer updates it. Instead, they are always up-to-date, and a cache system ensures the robustness of displays.
 * The number of travelnets in a network is no longer limited to 24. Though packed, the system properly handles the display of >24 travelnets.
 * A sorting key field is added. This is a 2-bit integer controlling how travelnets should be sorted when listed. Travelnets first get sorted by their sorting key, then case-insensitive alphabetically.
