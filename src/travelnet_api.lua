@@ -9,7 +9,15 @@ local S = _int.S
 -- local logger = _int.logger:sublogger("travelnet_api")
 
 function travelnet_redo.gui_setup_or_tp(player, pos)
-    if travelnet_redo.get_travelnet_from_map(pos) then
+    local travelnet = travelnet_redo.get_travelnet_from_map(pos)
+    if travelnet then
+        local network = travelnet_redo.get_network(travelnet.network_id)
+        local meta = minetest.get_meta(pos)
+
+        meta:set_string("infotext",
+            S("Travelnet @1 in @2@@@3, rightclick/tap to teleport.",
+                travelnet.display_name, network.network_name, network.network_owner))
+
         travelnet_redo.gui_tp:show(player, { pos = pos })
     else
         local name = player:get_player_name()
