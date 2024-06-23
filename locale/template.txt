@@ -8,7 +8,40 @@ Network #@1 not found.=
 Successfully set network @1@@@2 (#@3) to be always cached.=
 Set a network to no longer be always cached=
 Successfully set network @1@@@2 (#@3) to no longer be always cached.=
+<network id> <new owner>=
+Change the owner of a network=
+Invalid usage, see /help @1=
+Successfully transfered network @1 (#@2) from @3 to @4.=
+Sync travelnets with the node database=
+Travelnet node database synchronized. (Restored @1, removed @2, used @3 ms)=
 
+##[ src/db_api.lua ]##
+##[ src/gui_setup.lua ]##
+##[ src/travelnet_api.lua ]##
+Travelnet @1 in @2@@@3, rightclick/tap to teleport.=
+
+##[ src/db_api.lua ]##
+##[ src/gui_tp.lua ]##
+##[ src/travelnet_api.lua ]##
+Unconfigured travelnet, rightclick/tap to configure=
+
+##[ src/gui_attributions.lua ]##
+Error reading license text. For full text, see @1.=
+Licenses of Travelnet Redo=
+Back=
+
+##[ src/gui_attributions.lua ]##
+##[ src/gui_edit.lua ]##
+##[ src/gui_setup.lua ]##
+##[ src/gui_tp.lua ]##
+Exit=
+
+##[ src/gui_edit.lua ]##
+Successfully updated travelnet.=
+Edit this travelnet station=
+Abort=
+
+##[ src/gui_edit.lua ]##
 ##[ src/gui_setup.lua ]##
 Display name not given=
 Network name not given=
@@ -16,37 +49,45 @@ Length of display name cannot exceed 40=
 Length of network name cannot exceed 40=
 Insufficant privilege to attach travelnets!=
 Length of owner name cannot exceed 20=
-Travelnet of the same name already exists=
-Travelnet @1 in @2@@@3, rightclcik/tap to teleport.=
-Configure this travelnet station=
+Invalid sorting key!=
 Name of this station, prepend "(P)" to protect this station:=
 What do you call this place here? Example: "my first house", "mine", "shop"...=
 Assign to network:=
 You can have more than one network. If unsure, use "@1".=
 Owned by:=
 Unless you know what you are doing, leave this as is.=
+Sort key:=
+Integer defining the order, the smaller the upper.=
 Save=
 
-##[ src/gui_setup.lua ]##
+##[ src/gui_edit.lua ]##
 ##[ src/gui_tp.lua ]##
-Exit=
+You can't edit this travelnet.=
+
+##[ src/gui_setup.lua ]##
+Travelnet of the same name already exists=
+Configure this travelnet station=
 
 ##[ src/gui_tp.lua ]##
+Too fast!=
 Travelnet @1: Position protected!=
-Teleporting...=
+Teleporting to @1...=
 Travelnet @1: Not Found!=
 [HERE] @1=
+You are already here!=
+Can't teleport: Destination protected!=
+This travelnet is orphaned. Please set up again.=
+Setup=
 Travelnet-box Teleport Interface=
+Edit=
 Name of this travelnet: @1=
 Network attached: @1@@@2 (#@3)=
 Click or tap on the destion you want to go to.=
+@1Green@2: You are here; @3Red@4: Protected=
 
 ##[ src/privs.lua ]##
 allows to attach travelnet boxes to travelnets of other players=
 allows to dig travelnet boxes which belog to nets of other players=
-
-##[ src/travelnet_api.lua ]##
-Unconfigured travelnet, rightclick/tap to configure=
 
 ##[ src/travelnet_register.lua ]##
 @1 Travelnet-Box=

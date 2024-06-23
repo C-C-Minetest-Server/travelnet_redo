@@ -57,7 +57,7 @@ do
         file:close()
     else
         logger:error("Error reading license text. The GPL text will not be avaliable in-game.")
-        full_text = S("Error reading license text. For full text, see <https://www.gnu.org/licenses/>.")
+        full_text = S("Error reading license text. For full text, see @1.", "<https://www.gnu.org/licenses/>")
     end
 end
 
