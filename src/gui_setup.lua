@@ -119,8 +119,20 @@ travelnet_redo.gui_setup = flow.make_gui(function(player, ctx)
         -- Header
         gui.HBox {
             gui.Label {
+                w = 8,
                 label = S("Configure this travelnet station"),
                 expand = true, align_h = "left",
+            },
+            gui.Button {
+                label = "(C)",
+                w = 0.7, h = 0.7,
+                on_event = function(e_player, e_ctx)
+                    travelnet_redo.gui_setup:close(e_player)
+                    travelnet_redo.gui_attribution:show(e_player, {
+                        old_ctx = e_ctx,
+                        old_ui = travelnet_redo.gui_setup,
+                    })
+                end,
             },
             gui.ButtonExit {
                 label = "x",

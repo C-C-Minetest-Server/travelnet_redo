@@ -287,6 +287,17 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                 label = S("Travelnet-box Teleport Interface"),
                 expand = true, align_h = "left",
             },
+            gui.Button {
+                label = "(C)",
+                w = 1, h = 1,
+                on_event = function(e_player, e_ctx)
+                    travelnet_redo.gui_setup:close(e_player)
+                    travelnet_redo.gui_attribution:show(e_player, {
+                        old_ctx = e_ctx,
+                        old_ui = travelnet_redo.gui_tp,
+                    })
+                end,
+            },
             travelnet_redo.can_edit_travelnet(pos, name) and gui.Button {
                 w = 1, h = 0.8,
                 label = S("Edit"),

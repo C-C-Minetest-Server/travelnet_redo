@@ -2,6 +2,7 @@
 
 ## License of code
 
+        Copyright (C) 2013-2024  Sokomine and contributors
         Copyright (C) 2024  1F616EMO
 
         This program is free software: you can redistribute it and/or modify

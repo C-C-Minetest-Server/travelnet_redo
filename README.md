@@ -2,6 +2,8 @@
 
 This is a rewrite of the [original Travelnet mod](https://content.minetest.net/packages/mt-mods/travelnet/), using PostgreSQL as the storage backend.
 
+This rewrite is based on [commit `fad216d` of mt-mods' fork](https://github.com/mt-mods/travelnet/commit/fad216db52b8fc8fafa11868d80c9e35c4b4a7ac), a fork of the [unmaintained upstream](https://github.com/Sokomine/travelnet) By Sokomine.
+
 ## Why this fork?
 
 * Cleaner codes: Getting rid of 12 years of ancient debris hidden deep inside codes
