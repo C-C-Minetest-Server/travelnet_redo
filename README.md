@@ -10,6 +10,7 @@ This is a rewrite of the [original Travelnet mod](https://content.minetest.net/p
 * Easier sorting: Adds a sorting key field to customize the order of travelnets in the list
 * No hacky digging/removal code: Travelnets can be dug normally instead of asking for detachment in the UI
 * No more [cramped UIs](https://github.com/mt-mods/travelnet/issues/53): Using flow as the GUI library, the elements align themselves neatly
+* You know why you can't teleport: Current travelnet is in green, protected ones are in sharp red
 
 ## Changes
 
