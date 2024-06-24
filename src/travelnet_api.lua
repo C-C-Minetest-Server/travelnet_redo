@@ -10,23 +10,32 @@ local S = _int.S
 
 function travelnet_redo.gui_setup_or_tp(player, pos)
     local travelnet = travelnet_redo.get_travelnet_from_map(pos)
+    local name = player:get_player_name()
     if travelnet then
-        local network = travelnet_redo.get_network(travelnet.network_id)
         local meta = minetest.get_meta(pos)
+        local network = travelnet_redo.get_network(travelnet.network_id)
+        if not network then
+            meta:set_string("infotext", S("Unconfigured travelnet, rightclick/tap to configure"))
+            meta:set_string("display_name", "")
+            meta:set_int("network_id", 0)
+            meta:set_string("travelnet_redo_configured", "")
 
-        meta:set_string("infotext",
-            S("Travelnet @1 in @2@@@3, rightclick/tap to teleport.",
-                travelnet.display_name, network.network_name, network.network_owner))
-
-        travelnet_redo.gui_tp:show(player, { pos = pos })
-    else
-        local name = player:get_player_name()
-        if minetest.is_protected(pos, name) then
-            minetest.record_protection_violation(pos, name)
+            minetest.chat_send_player(name,
+                S("This travelnet is orphaned. Please set up again."))
+        else
+            meta:set_string("infotext",
+                S("Travelnet @1 in @2@@@3, rightclick/tap to teleport.",
+                    travelnet.display_name, network.network_name, network.network_owner))
+            travelnet_redo.gui_tp:show(player, { pos = pos })
             return
         end
-        travelnet_redo.gui_setup:show(player, { pos = pos })
     end
+
+    if minetest.is_protected(pos, name) then
+        minetest.record_protection_violation(pos, name)
+        return
+    end
+    travelnet_redo.gui_setup:show(player, { pos = pos })
 end
 
 minetest.register_node("travelnet_redo:placeholder", {
