@@ -205,7 +205,7 @@ function travelnet_redo.add_travelnet(pos, display_name, network_id, sort_key)
     end
 end
 
-function travelnet_redo.update_travelnet(pos, display_name, network_id, sort_key)
+function travelnet_redo.update_travelnet(pos, display_name, network_id, sort_key, old_network_id)
     sort_key = sort_key or 0
     local meta = minetest.get_meta(pos)
     if meta:get_string("travelnet_redo_configured") == "" then
@@ -233,6 +233,11 @@ function travelnet_redo.update_travelnet(pos, display_name, network_id, sort_key
             sort_key = sort_key,
         }
         cache[network_id].last_accessed = os.time()
+    end
+
+    if old_network_id and cache[old_network_id] then
+        cache[old_network_id].travelnets[pos_hash] = nil
+        cache[old_network_id].last_accessed = os.time()
     end
 end
 

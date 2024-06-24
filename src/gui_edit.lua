@@ -82,7 +82,8 @@ local function on_save(player, ctx)
     end
 
     local network_id = travelnet_redo.create_or_get_network(network_name, network_owner)
-    travelnet_redo.update_travelnet(pos, display_name, network_id, sort_key)
+    local old_travelnet = travelnet_redo.get_travelnet_from_map(pos)
+    travelnet_redo.update_travelnet(pos, display_name, network_id, sort_key, old_travelnet.network_id)
     minetest.chat_send_player(name, S("Successfully updated travelnet."))
 
     logger:action("%s edited travelnet at %s, name = %s, network = %s@%s (#%d), sort_key = %d",
