@@ -405,6 +405,27 @@ function travelnet_redo.sync_ndb()
     return restored, removed, os.clock() - t1
 end
 
+-- Load all always cached networks
+do
+    local res, err = _db.get_network_always_cached()
+    if not res then
+        logger:raise("Failed to load always-cached networks: %s", err)
+    end
+    local now = os.time()
+    for i, data in ipairs(res) do
+        logger:action("Preloading travelnet #%i (%s@%s) into memory",
+            i, data.network_name, data.network_owner)
+        cache[data.network_id] = {
+            network_id = data.network_id,
+            network_name = data.network_name,
+            network_owner = data.network_owner,
+            always_cache = true,
+            travelnets = travelnet_redo.get_travelnets_in_network(data.network_id),
+            last_accessed = now,
+        }
+    end
+end
+
 modlib.minetest.register_globalstep(59 + math.random(), function()
     -- Remove travelnets without any children
     do
@@ -424,7 +445,7 @@ modlib.minetest.register_globalstep(59 + math.random(), function()
             local network_id = data.network_id
             local d_res, d_err = _db.delete_travelnet_network(network_id)
             if not d_res then
-                logger:raise("Failed to delete travelnet network#%d: %s", network_id, d_err)
+                logger:raise("Failed to delete travelnet network #%i: %s", network_id, d_err)
             end
             cache[network_id] = nil
         end
@@ -436,6 +457,8 @@ modlib.minetest.register_globalstep(59 + math.random(), function()
         if not cache_data.always_cache then
             if now - cache_data.last_accessed > settings.cache_duration then
                 -- Drop the unused cache
+                logger:action("Dropping unused cache of network #%i (%s@%s)",
+                    network_id, cache_data.network_name, cache_data.network_owner)
                 cache[network_id] = nil
             end
         end

@@ -45,7 +45,7 @@ postgres:settimeout(2000) -- 2 seconds
 
 ---Methods that directly read/write the database
 ---Use methods with caching capability whenever possible
----@class travelnet_redo.internal.database
+---@class travelnet_redo.internal.database table
 local _db = {}
 _int.database = _db
 
@@ -71,6 +71,13 @@ function _db.get_network_by_id(network_id)
         "SELECT network_id, network_name, network_owner, network_always_cache " ..
         "FROM travelnet_redo_networks " ..
         "WHERE network_id = %d;", network_id))
+end
+
+function _db.get_network_always_cached()
+    return _int.query(
+        "SELECT network_id, network_name, network_owner " ..
+        "FROM travelnet_redo_networks " ..
+        "WHERE network_always_cache;")
 end
 
 function _db.get_network_by_name_owner(name, owner)
