@@ -43,7 +43,7 @@ function travelnet_redo.register_default_travelnet(name, description, color, lig
         use_texture_alpha = "clip",
         inventory_image = "travelnet_inv_base.png^(travelnet_inv_colorable.png^[multiply:" .. color .. ")",
         is_ground_content = false,
-        groups = { cracky = 3, pickaxey=1, transport=1 },
+        groups = { cracky = 3, pickaxey=1, transport=1, travelnet_redo_default = 1 },
         sounds = xcompat.sounds.node_sound_glass_defaults(),
         light_source = light or 10,
     })
@@ -136,7 +136,7 @@ for name, cfg in pairs(default_travelnets) do
         minetest.register_craft({
             output = name,
             type = "shapeless",
-            recipe = { "group:travelnet_redo", cfg.dye },
+            recipe = { "group:travelnet_redo_default", cfg.dye },
         })
     end
 end
