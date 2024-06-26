@@ -235,7 +235,7 @@ function travelnet_redo.update_travelnet(pos, display_name, network_id, sort_key
         cache[network_id].last_accessed = os.time()
     end
 
-    if old_network_id and cache[old_network_id] then
+    if old_network_id and network_id ~= old_network_id and cache[old_network_id] then
         cache[old_network_id].travelnets[pos_hash] = nil
         cache[old_network_id].last_accessed = os.time()
     end
