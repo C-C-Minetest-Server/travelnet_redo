@@ -12,7 +12,6 @@ This rewrite is based on [commit `fad216d` of mt-mods' fork](https://github.com/
 * Easier sorting: Adds a sorting key field to customize the order of travelnets in the list
 * No hacky digging/removal code: Travelnets can be dug normally instead of asking for detachment in the UI
 * No more [cramped UIs](https://github.com/mt-mods/travelnet/issues/53): Using flow as the GUI library, the elements align themselves neatly
-* You know why you can't teleport: Current travelnet is in green, protected ones are in sharp red
 
 ## Changes
 
@@ -21,6 +20,7 @@ This rewrite is based on [commit `fad216d` of mt-mods' fork](https://github.com/
 * Punching the travelnet no longer updates it. Instead, they are always up-to-date, and a cache system ensures the robustness of displays.
 * The number of travelnets in a network is no longer limited to 24. Though packed, the system properly handles the display of >24 travelnets.
 * A sorting key field is added. This is a 2-bit signed integer controlling how travelnets should be sorted when listed, the smaller the upper. Travelnets first get sorted by their sorting key, then case-insensitive alphabetically.
+* Apart from "(P)" meaning protected, "(I)" means enter only - you can't exit from that travelnet unless you own that travelnet.
 
 ## Installation
 

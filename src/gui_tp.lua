@@ -26,7 +26,7 @@ local function sort_travelnets(travelnets)
     end
 
     table.sort(rtn, function(a, b)
-        if a.sort_key  == b.sort_key then
+        if a.sort_key == b.sort_key then
             local name_a = lower(a.display_name)
             local name_b = lower(b.display_name)
 
@@ -86,17 +86,22 @@ local function btn_event_tp_to(tp_pos)
         local travelnet = network.travelnets[hash]
         if travelnet then
             local name = player:get_player_name()
+            local prefix = string.sub(travelnet.display_name, 1, 3)
             if teleporting[name] then
                 ctx.errmsg = minetest.get_color_escape_sequence("red") ..
                     S("Too fast!")
                 return true
-            elseif string.sub(travelnet.display_name, 1, 3) == "(P)" then
-                if minetest.is_protected(travelnet.pos, name) then
-                    minetest.record_protection_violation(travelnet.pos, name)
-                    ctx.errmsg = minetest.get_color_escape_sequence("red") ..
-                        S("Travelnet @1: Position protected!", travelnet.display_name)
-                    return true
-                end
+            elseif prefix == "(P)"
+            and minetest.is_protected(travelnet.pos, name) then
+                minetest.record_protection_violation(travelnet.pos, name)
+                ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+                    S("Travelnet @1: Position protected!", travelnet.display_name)
+                return true
+            elseif prefix == "(I)"
+            and not travelnet_redo.can_edit_travelnet(travelnet.pos, name) then
+                ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+                    S("Travelnet @1: You cannot exit from this tgravelnet!", travelnet.display_name)
+                return true
             end
 
             local callback = function()
@@ -174,43 +179,46 @@ local function generate_btn_list(player, ctx, travelnets)
 
     local sorted_travelnets = sort_travelnets(travelnets)
     local len_travelnets = #sorted_travelnets
-    local col_length = math.max(math.ceil(len_travelnets / 3), 8)
-    local columns = {}
-    for base = 1, len_travelnets, col_length do
-        local col = {}
-        for i = base, math.min(base + col_length - 1, len_travelnets) do
-            local tvnet = sorted_travelnets[i]
+    if len_travelnets == 0 then return gui.Nil {} end -- should not happen
+    local btns ={}
 
-            local btn = {
-                w = 6,
-                h = 1,
-                label = tvnet.display_name,
-            }
-            if vector.equals(this_pos, tvnet.pos) then
-                btn.style = {
-                    bgcolor = "green"
-                }
-                btn.label = S("[HERE] @1", btn.label)
-                btn.on_event = function(_, e_ctx)
+    for i = 1, len_travelnets do
+        local tvnet = sorted_travelnets[i]
+        local prefix = string.sub(tvnet.display_name, 1, 3)
+
+        -- luacheck: ignore 542
+        if vector.equals(this_pos, tvnet.pos) then
+            btns[#btns + 1] = gui.Button {
+                w = 6, h = 1,
+                label = S("[HERE] @1", tvnet.display_name),
+                on_event = function(_, e_ctx)
                     e_ctx.errmsg = minetest.get_color_escape_sequence("green") ..
                         S("You are already here!")
                     return true
-                end
-            elseif string.sub(tvnet.display_name, 1, 3) == "(P)" and minetest.is_protected(tvnet.pos, name) then
-                btn.style = {
-                    bgcolor = "red",
-                }
-                btn.on_event = function(_, e_ctx)
-                    e_ctx.errmsg = minetest.get_color_escape_sequence("red") ..
-                        S("Can't teleport: Destination protected!")
-                    return true
-                end
-            else
-                btn.on_event = btn_event_tp_to(tvnet.pos)
-            end
-            col[#col + 1] = gui.Button(btn)
+                end,
+                style = {
+                    bgcolor = "green"
+                },
+            }
+        elseif prefix == "(I)"
+            and not travelnet_redo.can_edit_travelnet(tvnet.pos, name) then
+            -- Enter only
+        elseif prefix == "(P)"
+            and minetest.is_protected(tvnet.pos, name) then
+            -- Protected
+        else
+            btns[#btns + 1] = gui.Button {
+                w = 6, h = 1,
+                label = tvnet.display_name,
+                on_event = btn_event_tp_to(tvnet.pos),
+            }
         end
+    end
 
+    local columns = {}
+    local col_length = math.max(math.ceil(#btns / 3), 8)
+    for i = 1, #btns, col_length do
+        local col = { unpack(btns, i, i + col_length - 1) }
         col.min_w = 6
         col.min_h = 8
         col.expand = true
@@ -312,7 +320,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                     travelnet_redo.gui_tp:close(e_player)
                     travelnet_redo.gui_edit:show(e_player, { pos = e_ctx.pos })
                 end,
-            } or gui.Nil{},
+            } or gui.Nil {},
             gui.ButtonExit {
                 w = 1, h = 0.8,
                 label = S("Exit"),
@@ -332,19 +340,9 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                 expand = true,
             },
         },
-        gui.HBox {
-            gui.Label {
-                w = 8, expand = true,
-                label = errmsg or S("Click or tap on the destion you want to go to."),
-            },
-            gui.Label {
-                w = 8, expand = true,
-                label = S("@1Green@2: You are here; @3Red@4: Protected",
-                    minetest.get_color_escape_sequence("green"),
-                    minetest.get_color_escape_sequence("white"),
-                    minetest.get_color_escape_sequence("red"),
-                    minetest.get_color_escape_sequence("white"))
-            }
+        gui.Label {
+            w = 8, h = 0.5,
+            label = errmsg or S("Click or tap on the destion you want to go to."),
         },
         generate_btn_list(player, ctx, network.travelnets)
     }
