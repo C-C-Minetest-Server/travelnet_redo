@@ -107,7 +107,8 @@ local function btn_event_tp_to(tp_pos)
                     S("Too fast!")
                 return true
             elseif prefix == "(P)"
-            and minetest.is_protected(travelnet.pos, name) then
+            and minetest.is_protected(travelnet.pos, name)
+            and not travelnet_redo.can_edit_travelnet(travelnet.pos, name) then
                 minetest.record_protection_violation(travelnet.pos, name)
                 ctx.errmsg = minetest.get_color_escape_sequence("red") ..
                     S("Travelnet @1: Position protected!", travelnet.display_name)
@@ -219,7 +220,8 @@ local function generate_btn_list(player, ctx, travelnets)
             and not travelnet_redo.can_edit_travelnet(tvnet.pos, name) then
             -- Enter only
         elseif prefix == "(P)"
-            and minetest.is_protected(tvnet.pos, name) then
+            and minetest.is_protected(tvnet.pos, name)
+            and not travelnet_redo.can_edit_travelnet(tvnet.pos, name) then
             -- Protected
         else
             btns[#btns + 1] = gui.Button {
