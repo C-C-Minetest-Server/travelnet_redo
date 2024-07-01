@@ -22,33 +22,34 @@ local trim = string.trim
 ---@return boolean
 ---@see table.sort
 function travelnet_redo.travelnet_sort_compare(a, b)
-    if a.sort_key == b.sort_key then
-        local name_a = lower(a.display_name)
-        local name_b = lower(b.display_name)
-
-        if string.find(name_a, "^%([pi]%)") then
-            name_a = sub(name_a, 4)
-        end
-
-        if string.find(name_b, "^%([pi]%)") then
-            name_b = sub(name_b, 4)
-        end
-
-        ---@type string
-        name_a = trim(name_a)
-        ---@type string
-        name_b = trim(name_b)
-
-        -- Do integral comparison if they both start with integers
-        local num_a = tonumber(string.match(name_a, "^%d+"))
-        local num_b = tonumber(string.match(name_b, "^%d+"))
-        if num_a and num_b then
-            return num_a < num_b
-        end
-
-        return name_a < name_b
+    if a.sort_key ~= b.sort_key then
+        return a.sort_key < b.sort_key
     end
-    return a.sort_key < b.sort_key
+
+    local name_a = lower(a.display_name)
+    local name_b = lower(b.display_name)
+
+    if string.find(name_a, "^%([pi]%)") then
+        name_a = sub(name_a, 4)
+    end
+
+    if string.find(name_b, "^%([pi]%)") then
+        name_b = sub(name_b, 4)
+    end
+
+    ---@type string
+    name_a = trim(name_a)
+    ---@type string
+    name_b = trim(name_b)
+
+    -- Do integral comparison if they both start with integers
+    local num_a = tonumber(string.match(name_a, "^%d+"))
+    local num_b = tonumber(string.match(name_b, "^%d+"))
+    if num_a and num_b and num_a ~= num_b then
+        return num_a < num_b
+    end
+
+    return name_a < name_b
 end
 
 ---@param travelnets { [integer]: travelnet_redo.Travelnet }
