@@ -21,6 +21,7 @@ This rewrite is based on [commit `fad216d` of mt-mods' fork](https://github.com/
 * The number of travelnets in a network is no longer limited to 24. Though packed, the system properly handles the display of >24 travelnets.
 * A sorting key field is added. This is a 2-bit signed integer controlling how travelnets should be sorted when listed, the smaller the upper. Travelnets first get sorted by their sorting key, then case-insensitive alphabetically.
 * Apart from "(P)" meaning protected, "(I)" means enter only - you can't exit from that travelnet unless you own that travelnet.
+* If travelnet names start with integers, they are sorted numerically.
 
 ## Installation
 

@@ -16,6 +16,41 @@ local lower = string.lower
 local sub = string.sub
 local trim = string.trim
 
+---Compare two travelnets
+---@param a travelnet_redo.Travelnet
+---@param b travelnet_redo.Travelnet
+---@return boolean
+---@see table.sort
+function travelnet_redo.travelnet_sort_compare(a, b)
+    if a.sort_key == b.sort_key then
+        local name_a = lower(a.display_name)
+        local name_b = lower(b.display_name)
+
+        if string.find(name_a, "^%([pi]%)") then
+            name_a = sub(name_a, 4)
+        end
+
+        if string.find(name_b, "^%([pi]%)") then
+            name_b = sub(name_b, 4)
+        end
+
+        ---@type string
+        name_a = trim(name_a)
+        ---@type string
+        name_b = trim(name_b)
+
+        -- Do integral comparison if they both start with integers
+        local num_a = tonumber(string.match(name_a, "^%d+"))
+        local num_b = tonumber(string.match(name_b, "^%d+"))
+        if num_a and num_b then
+            return num_a < num_b
+        end
+
+        return name_a < name_b
+    end
+    return a.sort_key < b.sort_key
+end
+
 ---@param travelnets { [integer]: travelnet_redo.Travelnet }
 ---@return travelnet_redo.Travelnet[]
 local function sort_travelnets(travelnets)
@@ -25,28 +60,7 @@ local function sort_travelnets(travelnets)
         rtn[#rtn + 1] = def
     end
 
-    table.sort(rtn, function(a, b)
-        if a.sort_key == b.sort_key then
-            local name_a = lower(a.display_name)
-            local name_b = lower(b.display_name)
-
-            if sub(name_a, 1, 3) == "(p)" then
-                name_a = sub(name_a, 4)
-            end
-
-            if sub(name_b, 1, 3) == "(p)" then
-                name_b = sub(name_b, 4)
-            end
-
-            ---@type string
-            name_a = trim(name_a)
-            ---@type string
-            name_b = trim(name_b)
-
-            return name_a < name_b
-        end
-        return a.sort_key < b.sort_key
-    end)
+    table.sort(rtn, travelnet_redo.travelnet_sort_compare)
 
     return rtn
 end
