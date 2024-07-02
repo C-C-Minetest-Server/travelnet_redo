@@ -99,6 +99,7 @@ function travelnet_redo.register_travelnet(name, def)
 
     def.groups = def.groups or {}
     def.groups.travelnet_redo = 1
+    def.is_ground_content = false
 
     minetest.register_node(name, def)
 

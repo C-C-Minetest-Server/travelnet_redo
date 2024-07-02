@@ -42,7 +42,6 @@ function travelnet_redo.register_default_travelnet(name, description, color, lig
 
         use_texture_alpha = "clip",
         inventory_image = "travelnet_inv_base.png^(travelnet_inv_colorable.png^[multiply:" .. color .. ")",
-        is_ground_content = false,
         groups = { cracky = 3, pickaxey = 1, transport = 1, travelnet_redo_default = 1 },
         sounds = xcompat.sounds.node_sound_glass_defaults(),
         light_source = light or 10,
