@@ -38,6 +38,46 @@ function travelnet_redo.gui_setup_or_tp(player, pos)
     travelnet_redo.gui_setup:show(player, { pos = pos })
 end
 
+function travelnet_redo.on_construct(pos)
+    local meta = minetest.get_meta(pos)
+    meta:set_string("infotext", S("Unconfigured travelnet, rightclick/tap to configure"))
+
+    local up = vector.new(pos.x, pos.y + 1, pos.z)
+    local up_node = minetest.get_node_or_nil(up)
+    if up_node then
+        local up_def = minetest.registered_nodes[up_node.name]
+        if up_def and up_def.buildable_to then
+            minetest.set_node(up, { name = "travelnet_redo:placeholder" })
+        end
+    end
+end
+
+function travelnet_redo.on_rightclick(pos, _, player, itemstack)
+    if not player:is_player() then return end
+
+    travelnet_redo.gui_setup_or_tp(player, pos)
+    return itemstack
+end
+
+function travelnet_redo.can_dig(pos, player)
+    if not player:is_player() then return false end
+    return travelnet_redo.can_edit_travelnet(pos, player:get_player_name())
+end
+
+function travelnet_redo.on_construct(pos)
+    local travelnet = travelnet_redo.get_travelnet_from_map(pos)
+    if travelnet then
+        travelnet_redo.remove_travelnet(pos, travelnet.network_id)
+    end
+
+    local up = vector.new(pos.x, pos.y + 1, pos.z)
+    if minetest.get_node(up).name == "travelnet_redo:placeholder" then
+        minetest.remove_node(up)
+    end
+end
+
+local function noop() end
+
 minetest.register_node("travelnet_redo:placeholder", {
     drawtype = "airlike",
     paramtype = "light",
@@ -57,45 +97,11 @@ end
 function travelnet_redo.register_travelnet(name, def)
     def = table.copy(def)
 
-    def.on_construct = function(pos)
-        local meta = minetest.get_meta(pos)
-        meta:set_string("infotext", S("Unconfigured travelnet, rightclick/tap to configure"))
-
-        local up = vector.new(pos.x, pos.y + 1, pos.z)
-        local up_node = minetest.get_node_or_nil(up)
-        if up_node then
-            local up_def = minetest.registered_nodes[up_node.name]
-            if up_def and up_def.buildable_to then
-                minetest.set_node(up, { name = "travelnet_redo:placeholder" })
-            end
-        end
-    end
-
-    def.on_rightclick = function(pos, _, player, itemstack)
-        if not player:is_player() then return end
-
-        travelnet_redo.gui_setup_or_tp(player, pos)
-        return itemstack
-    end
-
-    def.can_dig = function(pos, player)
-        if not player:is_player() then return false end
-        return travelnet_redo.can_edit_travelnet(pos, player:get_player_name())
-    end
-
-    def.on_destruct = function(pos)
-        local travelnet = travelnet_redo.get_travelnet_from_map(pos)
-        if travelnet then
-            travelnet_redo.remove_travelnet(pos, travelnet.network_id)
-        end
-
-        local up = vector.new(pos.x, pos.y + 1, pos.z)
-        if minetest.get_node(up).name == "travelnet_redo:placeholder" then
-            minetest.remove_node(up)
-        end
-    end
-
-    def.on_blast = function() end
+    def.on_construct = travelnet_redo.on_construct
+    def.on_rightclick = travelnet_redo.on_rightclick
+    def.can_dig = travelnet_redo.can_di
+    def.on_destruct = travelnet_redo.on_construct
+    def.on_blast = noop
 
     def.groups = def.groups or {}
     def.groups.travelnet_redo = 1
