@@ -217,7 +217,7 @@ local function generate_btn_list(player, ctx, travelnets)
                 label = S("[HERE] @1", tvnet.display_name),
                 on_event = function(_, e_ctx)
                     e_ctx.errmsg = minetest.get_color_escape_sequence("green") ..
-                        S("You are already here!")
+                        S("You are already at @1!", tvnet.display_name)
                     return true
                 end,
                 style = {
@@ -231,6 +231,18 @@ local function generate_btn_list(player, ctx, travelnets)
             and minetest.is_protected(tvnet.pos, name)
             and not travelnet_redo.can_edit_travelnet(tvnet.pos, name) then
             -- Protected
+            btns[#btns + 1] = gui.Button {
+                w = 6, h = 1,
+                label = tvnet.display_name,
+                on_event = function(_, e_ctx)
+                    e_ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+                        S("Travelnet @1 is protected!", tvnet.display_name)
+                    return true
+                end,
+                style = {
+                    bgcolor = "red"
+                },
+            }
         else
             btns[#btns + 1] = gui.Button {
                 w = 6, h = 1,
