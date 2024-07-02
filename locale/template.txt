@@ -71,23 +71,26 @@ Configure this travelnet station=
 ##[ src/gui_tp.lua ]##
 Too fast!=
 Travelnet @1: Position protected!=
+Travelnet @1: You cannot exit from this tgravelnet!=
 Teleporting to @1...=
 Travelnet @1: Not Found!=
 [HERE] @1=
-You are already here!=
-Can't teleport: Destination protected!=
-This travelnet is orphaned. Please set up again.=
+You are already at @1!=
+Travelnet @1 is protected!=
 Setup=
 Travelnet-box Teleport Interface=
 Edit=
 Name of this travelnet: @1=
 Network attached: @1@@@2 (#@3)=
 Click or tap on the destion you want to go to.=
-@1Green@2: You are here; @3Red@4: Protected=
+
+##[ src/gui_tp.lua ]##
+##[ src/travelnet_api.lua ]##
+This travelnet is orphaned. Please set up again.=
 
 ##[ src/privs.lua ]##
-allows to attach travelnet boxes to travelnets of other players=
-allows to dig travelnet boxes which belog to nets of other players=
+Allows to attach travelnet boxes to travelnets of other players=
+Allows to dig travelnet boxes which belog to nets of other players=
 
 ##[ src/travelnet_register.lua ]##
 @1 Travelnet-Box=

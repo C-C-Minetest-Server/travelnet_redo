@@ -384,14 +384,14 @@ function travelnet_redo.sync_ndb()
             local map_travelnet = travelnet_redo.get_travelnet_from_map(pos)
             local meta = minetest.get_meta(pos)
             if not map_travelnet
-            or map_travelnet.network_id ~= travelnet.tvnet_network_id
-            or map_travelnet.display_name ~= travelnet.tvnet_display_name
-            or map_travelnet.sort_key ~= travelnet.tvnet_sort_key then
+                or map_travelnet.network_id ~= travelnet.tvnet_network_id
+                or map_travelnet.display_name ~= travelnet.tvnet_display_name
+                or map_travelnet.sort_key ~= travelnet.tvnet_sort_key then
                 local network = travelnet_redo.get_network(travelnet.tvnet_network_id)
                 restored = restored + 1
                 meta:set_string("infotext",
                     S("Travelnet @1 in @2@@@3, rightclick/tap to teleport.",
-                    travelnet.tvnet_display_name, network.network_name, network.network_owner))
+                        travelnet.tvnet_display_name, network.network_name, network.network_owner))
                 meta:set_string("travelnet_redo_configured", "1")
                 meta:set_string("network_owner", travelnet.tvnet_display_name)
                 meta:set_int("network_id", travelnet.tvnet_network_id)

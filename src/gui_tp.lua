@@ -107,14 +107,14 @@ local function btn_event_tp_to(tp_pos)
                     S("Too fast!")
                 return true
             elseif prefix == "(P)"
-            and minetest.is_protected(travelnet.pos, name)
-            and not travelnet_redo.can_edit_travelnet(travelnet.pos, name) then
+                and minetest.is_protected(travelnet.pos, name)
+                and not travelnet_redo.can_edit_travelnet(travelnet.pos, name) then
                 minetest.record_protection_violation(travelnet.pos, name)
                 ctx.errmsg = minetest.get_color_escape_sequence("red") ..
                     S("Travelnet @1: Position protected!", travelnet.display_name)
                 return true
             elseif prefix == "(I)"
-            and not travelnet_redo.can_edit_travelnet(travelnet.pos, name) then
+                and not travelnet_redo.can_edit_travelnet(travelnet.pos, name) then
                 ctx.errmsg = minetest.get_color_escape_sequence("red") ..
                     S("Travelnet @1: You cannot exit from this tgravelnet!", travelnet.display_name)
                 return true
@@ -204,7 +204,7 @@ local function generate_btn_list(player, ctx, travelnets)
     local sorted_travelnets = sort_travelnets(travelnets)
     local len_travelnets = #sorted_travelnets
     if len_travelnets == 0 then return gui.Nil {} end -- should not happen
-    local btns ={}
+    local btns = {}
 
     for i = 1, len_travelnets do
         local tvnet = sorted_travelnets[i]

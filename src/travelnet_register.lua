@@ -33,17 +33,17 @@ function travelnet_redo.register_default_travelnet(name, description, color, lig
         on_rotate = minetest.global_exists("screwdriver") and screwdriver.rotate_simple or nil,
 
         tiles = {
-            "(travelnet_travelnet_front_color.png^[multiply:" .. color .. ")^travelnet_travelnet_front.png", -- backward
-            "(travelnet_travelnet_back_color.png^[multiply:" .. color .. ")^travelnet_travelnet_back.png", -- front view
-            "(travelnet_travelnet_side_color.png^[multiply:" .. color .. ")^travelnet_travelnet_side.png", -- sides :)
-            "travelnet_top.png",                                                                    -- view from top
-            "travelnet_bottom.png",                                                                 -- view from bottom
+            "(travelnet_travelnet_front_color.png^[multiply:" .. color .. ")^travelnet_travelnet_front.png",
+            "(travelnet_travelnet_back_color.png^[multiply:" .. color .. ")^travelnet_travelnet_back.png",
+            "(travelnet_travelnet_side_color.png^[multiply:" .. color .. ")^travelnet_travelnet_side.png",
+            "travelnet_top.png",
+            "travelnet_bottom.png",
         },
 
         use_texture_alpha = "clip",
         inventory_image = "travelnet_inv_base.png^(travelnet_inv_colorable.png^[multiply:" .. color .. ")",
         is_ground_content = false,
-        groups = { cracky = 3, pickaxey=1, transport=1, travelnet_redo_default = 1 },
+        groups = { cracky = 3, pickaxey = 1, transport = 1, travelnet_redo_default = 1 },
         sounds = xcompat.sounds.node_sound_glass_defaults(),
         light_source = light or 10,
     })

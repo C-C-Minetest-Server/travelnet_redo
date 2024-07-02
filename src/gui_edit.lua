@@ -33,7 +33,7 @@ function travelnet_redo.check_can_edit(name, pos)
         return false, "Attempt to run gui_edit on unconfigured travelnet"
     end
 
-    if travelnet.owner ~= name and not minetest.check_player_privs(name, {travelnet_attach = true}) then
+    if travelnet.owner ~= name and not minetest.check_player_privs(name, { travelnet_attach = true }) then
         return false, "Attempt to edit other's travelnet"
     end
 
@@ -211,5 +211,3 @@ travelnet_redo.gui_edit = flow.make_gui(function(player, ctx)
         }
     }
 end)
-
-
