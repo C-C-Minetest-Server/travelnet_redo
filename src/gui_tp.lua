@@ -158,6 +158,14 @@ local function btn_event_tp_to(tp_pos)
                     hud:remove(player, hudname)
                 end
             end
+            if minetest.global_exists("background_music") then
+                local old_callback = callback
+                callback = function()
+                    old_callback()
+                    background_music.set_start_play_gap(name, 2)
+                    background_music.decide_and_play(player, true)
+                end
+            end
             teleporting[name] = true
             minetest.chat_send_player(name,
                 minetest.colorize("#FFD700", S("Teleporting to @1...", travelnet.display_name)))

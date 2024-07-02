@@ -33,6 +33,7 @@ read_globals = {
     "mhud",
     "mesecon",
     "screwdriver",
+    "background_music",
 
     table = {
         fields = {
