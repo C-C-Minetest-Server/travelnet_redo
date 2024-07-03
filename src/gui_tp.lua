@@ -162,7 +162,6 @@ local function btn_event_tp_to(tp_pos)
                 local old_callback = callback
                 callback = function()
                     old_callback()
-                    background_music.set_start_play_gap(name, 2)
                     background_music.decide_and_play(player, true)
                 end
             end
