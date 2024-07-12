@@ -34,6 +34,7 @@ read_globals = {
     "mesecon",
     "screwdriver",
     "background_music",
+    "teacher",
 
     table = {
         fields = {

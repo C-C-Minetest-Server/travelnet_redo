@@ -72,6 +72,7 @@ for _, name in ipairs({
 	"travelnet_api",   -- depends: gui_setup, gui_tp
 	"travelnet_register", -- depends: travelnet_api
 	"chatcommand",     -- runtime: privs, db_api
+	"teacher",
 }) do
 	dofile(MP .. DIR_DELIM .. "src" .. DIR_DELIM .. name .. ".lua")
 end
