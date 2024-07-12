@@ -62,6 +62,13 @@ function travelnet_redo.on_destruct(pos)
     end
 end
 
+---@param travelnet travelnet_redo.Travelnet
+---@param node { name: string, param1: integer, param2: integer }
+---@param player ObjectRef
+function travelnet_redo.default_on_teleport(travelnet, _, player)
+    player:set_pos(travelnet.pos)
+end
+
 local function noop() end
 
 local function add_or_run_after(tb, key, func)

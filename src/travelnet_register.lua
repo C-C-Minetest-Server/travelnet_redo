@@ -79,6 +79,22 @@ function travelnet_redo.register_default_travelnet(name, description, color, lig
                 minetest.remove_node(up)
             end
         end,
+
+        _travelnet_on_teleport = function(travelnet, node, player)
+            player:set_pos(vector.add(travelnet.pos, vector.new(0, -0.4, 0)))
+
+            local dir = vector.multiply(minetest.facedir_to_dir(node.param2), -1)
+            local yaw = minetest.dir_to_yaw(dir)
+
+            player:set_look_horizontal(yaw)
+            player:set_look_vertical(math.pi * 10 / 180)
+
+            minetest.sound_play("travelnet_travel", {
+                pos = travelnet.pos,
+                gain = 0.75,
+                max_hear_distance = 10
+            })
+        end,
     })
 end
 

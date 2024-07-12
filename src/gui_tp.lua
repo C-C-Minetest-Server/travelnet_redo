@@ -1,6 +1,6 @@
 -- travelnet_redo/src/gui_tp.lua
 -- GUI for using a travelnet
--- runtime: db_api, privs
+-- runtime: db_api, privs, travelnet_api
 -- Copyright (C) 2024  1F616EMO
 -- SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -66,7 +66,7 @@ local function sort_travelnets(travelnets)
     return rtn
 end
 
-local function emerge_and_teleport(name, pos, callback)
+local function emerge_and_callback(name, pos, callback)
     -- Range to preload
     local minp = vector.subtract(pos, 16)
     local maxp = vector.add(pos, 16)
@@ -88,7 +88,6 @@ local function emerge_and_teleport(name, pos, callback)
         if calls_remaining ~= 0 then return end
 
         -- Finally do the teleport
-        player:set_pos(pos)
         callback()
     end)
 end
@@ -121,24 +120,11 @@ local function btn_event_tp_to(tp_pos)
             end
 
             local callback = function()
+                player:set_pos(travelnet.pos)
                 local node = minetest.get_node(travelnet.pos)
-
-                if node.param2 > 3 then
-                    node.param2 = 0
-                    minetest.swap_node(travelnet.pos, node)
-                end
-
-                local dir = vector.multiply(minetest.facedir_to_dir(node.param2), -1)
-                local yaw = minetest.dir_to_yaw(dir)
-
-                player:set_look_horizontal(yaw)
-                player:set_look_vertical(math.pi * 10 / 180)
-
-                minetest.sound_play("travelnet_travel", {
-                    pos = travelnet.pos,
-                    gain = 0.75,
-                    max_hear_distance = 10
-                })
+                local def = minetest.registered_nodes[node.name]
+                local tp_func = def and def._travelnet_on_teleport or travelnet_redo.default_on_teleport
+                tp_func(travelnet, node, player)
 
                 teleporting[name] = nil
             end
@@ -168,7 +154,7 @@ local function btn_event_tp_to(tp_pos)
             teleporting[name] = true
             minetest.chat_send_player(name,
                 minetest.colorize("#FFD700", S("Teleporting to @1...", travelnet.display_name)))
-            emerge_and_teleport(name, travelnet.pos, callback)
+            emerge_and_callback(name, travelnet.pos, callback)
             travelnet_redo.gui_tp:close(player)
         else
             ctx.errmsg = minetest.get_color_escape_sequence("red") ..

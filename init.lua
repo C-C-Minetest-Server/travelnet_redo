@@ -67,7 +67,7 @@ for _, name in ipairs({
 	"db_api",          -- depends: db
 	"gui_attributions",
 	"gui_setup",       -- runtime: db_api, privs, gui_tp, gui_atribution
-	"gui_tp",          -- runtime: db_api, gui_edit, privs, gui_atribution
+	"gui_tp",          -- runtime: db_api, gui_edit, privs, gui_atribution, travelnet_api
 	"gui_edit",        -- runtime: db_api, gui_tp, gui_atribution
 	"travelnet_api",   -- depends: gui_setup, gui_tp
 	"travelnet_register", -- depends: travelnet_api
