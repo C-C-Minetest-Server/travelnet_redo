@@ -99,7 +99,7 @@ function travelnet_redo.register_travelnet(name, def)
 
     def.on_construct = travelnet_redo.on_construct
     def.on_rightclick = travelnet_redo.on_rightclick
-    def.can_dig = travelnet_redo.can_di
+    def.can_dig = travelnet_redo.can_dig
     def.on_destruct = travelnet_redo.on_construct
     def.on_blast = noop
 
