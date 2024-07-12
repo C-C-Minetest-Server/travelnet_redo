@@ -41,15 +41,6 @@ end
 function travelnet_redo.on_construct(pos)
     local meta = minetest.get_meta(pos)
     meta:set_string("infotext", S("Unconfigured travelnet, rightclick/tap to configure"))
-
-    local up = vector.new(pos.x, pos.y + 1, pos.z)
-    local up_node = minetest.get_node_or_nil(up)
-    if up_node then
-        local up_def = minetest.registered_nodes[up_node.name]
-        if up_def and up_def.buildable_to then
-            minetest.set_node(up, { name = "travelnet_redo:placeholder" })
-        end
-    end
 end
 
 function travelnet_redo.on_rightclick(pos, _, player, itemstack)
@@ -64,31 +55,26 @@ function travelnet_redo.can_dig(pos, player)
     return travelnet_redo.can_edit_travelnet(pos, player:get_player_name())
 end
 
-function travelnet_redo.on_construct(pos)
+function travelnet_redo.on_destruct(pos)
     local travelnet = travelnet_redo.get_travelnet_from_map(pos)
     if travelnet then
         travelnet_redo.remove_travelnet(pos, travelnet.network_id)
-    end
-
-    local up = vector.new(pos.x, pos.y + 1, pos.z)
-    if minetest.get_node(up).name == "travelnet_redo:placeholder" then
-        minetest.remove_node(up)
     end
 end
 
 local function noop() end
 
-minetest.register_node("travelnet_redo:placeholder", {
-    drawtype = "airlike",
-    paramtype = "light",
-    sunlight_propagates = true,
-    walkable = false,
-    pointable = false,
-    diggable = false,
-    buildable_to = false,
-    drop = "",
-    is_ground_content = false,
-})
+local function add_or_run_after(tb, key, func)
+    local old_func = tb[key]
+    if old_func then
+        tb[key] = function(...)
+            func(...)
+            old_func(...)
+        end
+    else
+        tb[key] = func
+    end
+end
 
 if minetest.global_exists("mesecons") then
     mesecon.register_mvps_stopper("travelnet_redo:placeholder")
@@ -97,10 +83,10 @@ end
 function travelnet_redo.register_travelnet(name, def)
     def = table.copy(def)
 
-    def.on_construct = travelnet_redo.on_construct
     def.on_rightclick = travelnet_redo.on_rightclick
     def.can_dig = travelnet_redo.can_dig
-    def.on_destruct = travelnet_redo.on_construct
+    add_or_run_after(def, "on_construct", travelnet_redo.on_construct)
+    add_or_run_after(def, "on_destruct", travelnet_redo.on_destruct)
     def.on_blast = noop
 
     def.groups = def.groups or {}

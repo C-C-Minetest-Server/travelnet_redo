@@ -19,6 +19,22 @@ local node_box = {
     }
 }
 
+minetest.register_node("travelnet_redo:placeholder", {
+    drawtype = "airlike",
+    paramtype = "light",
+    sunlight_propagates = true,
+    pointable = false,
+    diggable = false,
+    buildable_to = false,
+    drop = "",
+    is_ground_content = false,
+
+    collision_box = {
+        type = "fixed",
+        fixed = { -0.5, 0.4375 , -0.5,   0.5,     0.5,     0.5 }
+    }
+})
+
 function travelnet_redo.register_default_travelnet(name, description, color, light)
     travelnet_redo.register_travelnet(name, {
         description = description,
@@ -45,6 +61,24 @@ function travelnet_redo.register_default_travelnet(name, description, color, lig
         groups = { cracky = 3, pickaxey = 1, transport = 1, travelnet_redo_default = 1 },
         sounds = xcompat.sounds.node_sound_glass_defaults(),
         light_source = light or 10,
+
+        on_construct = function(pos)
+            local up = vector.new(pos.x, pos.y + 1, pos.z)
+            local up_node = minetest.get_node_or_nil(up)
+            if up_node then
+                local up_def = minetest.registered_nodes[up_node.name]
+                if up_def and up_def.buildable_to then
+                    minetest.set_node(up, { name = "travelnet_redo:placeholder" })
+                end
+            end
+        end,
+
+        on_destruct = function(pos)
+            local up = vector.new(pos.x, pos.y + 1, pos.z)
+            if minetest.get_node(up).name == "travelnet_redo:placeholder" then
+                minetest.remove_node(up)
+            end
+        end,
     })
 end
 
