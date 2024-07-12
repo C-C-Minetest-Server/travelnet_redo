@@ -92,6 +92,16 @@ This travelnet is orphaned. Please set up again.=
 Allows to attach travelnet boxes to travelnets of other players=
 Allows to dig travelnet boxes which belog to nets of other players=
 
+##[ src/teacher.lua ]##
+Travelnets=
+Travelnets are devices providing instant transportation between distinct locations.=
+To use a travelnet, right-click a configured travelnet and select a destination.=
+In the interface of a travelnet, click or tap on the name of your desired destination.=
+If the background is green, you are already in this travelnet. There is no point in teleporting there.=
+If the background is red, the destination is protected. You cannot teleport there.=
+To set up a travelnet, place down a new travelnet and right click it. Fill in the form, then click/tap save.=
+To edit an existing travelnet, right click it then click/tap edit. To remove one, dig the travelnet.=
+
 ##[ src/travelnet_register.lua ]##
 @1 Travelnet-Box=
 Yellow=
