@@ -35,6 +35,25 @@ minetest.register_node("travelnet_redo:placeholder", {
     }
 })
 
+local dye_to_travelnet = {}
+local function on_punch(pos, node, player)
+    if not player:is_player() then return end
+    local wield = player:get_wielded_item()
+    local new_travelnet = dye_to_travelnet[wield:get_name()]
+    if new_travelnet and new_travelnet ~= node.name then
+        local name = player:get_player_name()
+        if not travelnet_redo.can_edit_travelnet(pos, name) then return end
+
+        if not minetest.is_creative_enabled(name) then
+            wield:take_item()
+            player:set_wielded_item(wield)
+        end
+
+        node.name = new_travelnet
+        minetest.swap_node(pos, node)
+    end
+end
+
 function travelnet_redo.register_default_travelnet(name, description, color, light)
     travelnet_redo.register_travelnet(name, {
         description = description,
@@ -61,6 +80,8 @@ function travelnet_redo.register_default_travelnet(name, description, color, lig
         groups = { cracky = 3, pickaxey = 1, transport = 1, travelnet_redo_default = 1 },
         sounds = xcompat.sounds.node_sound_glass_defaults(),
         light_source = light or 10,
+
+        on_punch = on_punch,
 
         on_construct = function(pos)
             local up = vector.new(pos.x, pos.y + 1, pos.z)
@@ -187,6 +208,8 @@ for name, cfg in pairs(default_travelnets) do
             type = "shapeless",
             recipe = { "group:travelnet_redo_default", cfg.dye },
         })
+
+        dye_to_travelnet[cfg.dye] = name
     end
 end
 
