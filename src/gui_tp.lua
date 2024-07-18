@@ -120,7 +120,6 @@ local function btn_event_tp_to(tp_pos)
             end
 
             local callback = function()
-                player:set_pos(travelnet.pos)
                 local node = minetest.get_node(travelnet.pos)
                 local def = minetest.registered_nodes[node.name]
                 local tp_func = def and def._travelnet_on_teleport or travelnet_redo.default_on_teleport
