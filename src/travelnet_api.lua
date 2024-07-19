@@ -69,6 +69,15 @@ function travelnet_redo.default_on_teleport(travelnet, _, player)
     player:set_pos(travelnet.pos)
 end
 
+---@param travelnet travelnet_redo.Travelnet
+---@param network travelnet_redo.TravelnetNetwork
+---@param node { name: string, param1: integer, param2: integer }
+function travelnet_redo.default_on_setup(travelnet, network, _)
+    local meta = minetest.get_meta(travelnet.pos)
+    meta:set_string("infotext", S("Travelnet @1 in @2@@@3, rightclick/tap to teleport.",
+        travelnet.display_name, network.network_name, network.network_owner))
+end
+
 local function noop() end
 
 local function add_or_run_after(tb, key, func)

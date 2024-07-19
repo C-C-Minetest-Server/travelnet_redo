@@ -177,6 +177,11 @@ end
 
 -- Write functions
 
+---@param pos vector
+---@param display_name string
+---@param network_id integer
+---@param sort_key integer
+---@return travelnet_redo.Travelnet?
 function travelnet_redo.add_travelnet(pos, display_name, network_id, sort_key)
     sort_key = sort_key or 0
 
@@ -195,13 +200,15 @@ function travelnet_redo.add_travelnet(pos, display_name, network_id, sort_key)
     meta:set_int("sort_key", sort_key)
 
     if cache[network_id] then
-        cache[network_id].travelnets[pos_hash] = {
+        local net = {
             pos = pos,
             display_name = display_name,
             network_id = network_id,
             sort_key = sort_key,
         }
+        cache[network_id].travelnets[pos_hash] = net
         cache[network_id].last_accessed = os.time()
+        return net
     end
 end
 

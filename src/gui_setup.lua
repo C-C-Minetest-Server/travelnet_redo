@@ -86,11 +86,12 @@ local function on_save(player, ctx)
         ctx.errmsg = S("Travelnet of the same name already exists")
         return true
     end
-    travelnet_redo.add_travelnet(pos, display_name, network_id, sort_key)
+    local travelnet = travelnet_redo.add_travelnet(pos, display_name, network_id, sort_key)
 
-    local meta = minetest.get_meta(pos)
-    meta:set_string("infotext",
-        S("Travelnet @1 in @2@@@3, rightclick/tap to teleport.", display_name, network_name, network_owner))
+    local node = minetest.get_node(pos)
+    local def  = minetest.registered_nodes[node.name]
+    local func = def and def._tvnet_on_setup or travelnet_redo.default_on_setup
+    func(travelnet, travelnet_redo.get_network(network_id), node)
 
     logger:action("%s set up travelnet at %s, name = %s, network = %s@%s (#%d), sort_key = %d",
         name, minetest.pos_to_string(pos), display_name, network_name, network_owner, network_id, sort_key
