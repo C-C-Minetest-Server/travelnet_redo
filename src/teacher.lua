@@ -38,6 +38,7 @@ teacher.register_turorial("travelnet_redo:default_travelnet", {
             S("To set up a travelnet, place down a new travelnet and right click it. " ..
                 "Fill in the form, then click/tap save.") .. "\n\n" ..
             S("To edit an existing travelnet, right click it then click/tap edit. " ..
-                "To remove one, dig the travelnet.")
+                "To remove one, dig the travelnet.") .. "\n\n" ..
+            S("Prepend a travelnet's name with \"@1\" so others cannot teleport to this travelnet.", "(P)")
     },
 })
