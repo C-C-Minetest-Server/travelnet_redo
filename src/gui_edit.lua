@@ -90,7 +90,7 @@ local function on_save(player, ctx)
         name, minetest.pos_to_string(pos), display_name, network_name, network_owner, network_id, sort_key
     )
     travelnet_redo.gui_edit:close(player)
-    travelnet_redo.gui_tp:show(player, { pos = pos })
+    _int.show_on_next_step(player, travelnet_redo.gui_tp, { pos = pos })
 end
 
 travelnet_redo.gui_edit = flow.make_gui(function(player, ctx)
@@ -205,7 +205,7 @@ travelnet_redo.gui_edit = flow.make_gui(function(player, ctx)
                 label = S("Abort"),
                 on_event = function(e_player, e_ctx)
                     travelnet_redo.gui_edit:close(e_player)
-                    travelnet_redo.gui_tp:show(e_player, { pos = e_ctx.pos })
+                    _int.show_on_next_step(e_player, travelnet_redo.gui_tp, { pos = e_ctx.pos })
                 end,
             }
         }

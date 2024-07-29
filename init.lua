@@ -61,6 +61,7 @@ travelnet_redo.internal.pgmoon = travelnet_redo.internal.func_with_IE_env(insecu
 
 local MP = minetest.get_modpath("travelnet_redo")
 for _, name in ipairs({
+	"utils",
 	"settings",
 	"privs",
 	"db",              -- depends: settings

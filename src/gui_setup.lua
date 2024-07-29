@@ -97,7 +97,7 @@ local function on_save(player, ctx)
         name, minetest.pos_to_string(pos), display_name, network_name, network_owner, network_id, sort_key
     )
     travelnet_redo.gui_setup:close(player)
-    travelnet_redo.gui_tp:show(player, { pos = pos })
+    _int.show_on_next_step(player, travelnet_redo.gui_tp, { pos = pos })
 end
 
 travelnet_redo.gui_setup = flow.make_gui(function(player, ctx)

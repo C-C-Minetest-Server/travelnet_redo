@@ -77,7 +77,7 @@ travelnet_redo.gui_attribution = flow.make_gui(function(_, ctx)
                 on_event = function(e_player, e_ctx)
                     travelnet_redo.gui_attribution:close(e_player)
                     if e_ctx.old_ctx and e_ctx.old_ui then
-                        e_ctx.old_ui:show(e_player, e_ctx.old_ctx)
+                        _int.show_on_next_step(e_player, e_ctx.old_ui, e_ctx.old_ctx)
                     end
                 end,
             },

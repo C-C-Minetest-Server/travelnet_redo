@@ -294,7 +294,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                     expand = true,
                     on_event = function(e_player, e_ctx)
                         travelnet_redo.gui_tp:close(e_player)
-                        travelnet_redo.gui_setup:show(e_player, { pos = e_ctx.pos })
+                        _int.show_on_next_step(e_player, travelnet_redo.gui_setup, { pos = e_ctx.pos })
                     end,
                 },
                 gui.ButtonExit {
@@ -321,7 +321,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                 w = 1, h = 1,
                 on_event = function(e_player, e_ctx)
                     travelnet_redo.gui_setup:close(e_player)
-                    travelnet_redo.gui_attribution:show(e_player, {
+                    _int.show_on_next_step(e_player, travelnet_redo.gui_attribution, {
                         old_ctx = e_ctx,
                         old_ui = travelnet_redo.gui_tp,
                     })
@@ -339,7 +339,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                     end
 
                     travelnet_redo.gui_tp:close(e_player)
-                    travelnet_redo.gui_edit:show(e_player, { pos = e_ctx.pos })
+                    _int.show_on_next_step(e_player, travelnet_redo.gui_edit, { pos = e_ctx.pos })
                 end,
             } or gui.Nil {},
             gui.ButtonExit {
