@@ -312,10 +312,18 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
         min_w = 18, min_h = 11.5,
         gui.HBox {
             gui.Label {
-                w = 10, h = 0.5,
+                w = 9, h = 0.5,
                 label = S("Travelnet-box Teleport Interface"),
                 expand = true, align_h = "left",
             },
+            minetest.get_modpath("teacher_core") and gui.Button {
+                label = "?",
+                w = 1, h = 1,
+                on_event = function(e_player)
+                    travelnet_redo.gui_setup:close(e_player)
+                    _int.safe_player_after(0, teacher.simple_show, e_player, "travelnet_redo:default_travelnet")
+                end,
+            } or gui.Nil {},
             gui.Button {
                 label = "(C)",
                 w = 1, h = 1,

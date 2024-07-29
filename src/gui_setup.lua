@@ -120,10 +120,18 @@ travelnet_redo.gui_setup = flow.make_gui(function(player, ctx)
         -- Header
         gui.HBox {
             gui.Label {
-                w = 8,
+                w = 7,
                 label = S("Configure this travelnet station"),
                 expand = true, align_h = "left",
             },
+            minetest.get_modpath("teacher_core") and gui.Button {
+                label = "?",
+                w = 0.7, h = 0.7,
+                on_event = function(e_player)
+                    travelnet_redo.gui_setup:close(e_player)
+                    _int.safe_player_after(0, teacher.simple_show, e_player, "travelnet_redo:default_travelnet")
+                end,
+            } or gui.Nil {},
             gui.Button {
                 label = "(C)",
                 w = 0.7, h = 0.7,

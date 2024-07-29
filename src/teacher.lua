@@ -14,7 +14,7 @@ teacher.register_turorial("travelnet_redo:default_travelnet", {
     triggers = {
         {
             name = "approach_node",
-            nodenames = "group:travelnet_redo_default",
+            nodenames = "group:travelnet_redo",
         },
     },
 
