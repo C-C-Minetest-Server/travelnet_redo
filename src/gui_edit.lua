@@ -202,6 +202,10 @@ travelnet_redo.gui_edit = flow.make_gui(function(player, ctx)
         },
 
         gui.HBox {
+            gui.Label {
+                w = 5,
+                label = S("To remove this travelnet, dig the node."),
+            },
             gui.Button {
                 w = 3, h = 1,
                 label = S("Save"),
