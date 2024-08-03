@@ -196,7 +196,7 @@ travelnet_redo.gui_edit = flow.make_gui(function(player, ctx)
                 },
                 gui.Field {
                     name = "sort_key",
-                    default = travelnet.sort_key,
+                    default = tostring(travelnet.sort_key),
                 },
             },
         },
