@@ -63,7 +63,7 @@ minetest.register_lbm({
     end,
 })
 
-function travelnet_redo.register_default_travelnet(name, description, color, light)
+function travelnet_redo.register_default_travelnet(name, description, tiles, inventory_image, light)
     light = light or 10
     local placeholder_name = "travelnet_redo:placeholder_" .. light
     if not placeholder_registered[light] then
@@ -95,16 +95,10 @@ function travelnet_redo.register_default_travelnet(name, description, color, lig
         collision_box = node_box,
         on_rotate = minetest.global_exists("screwdriver") and screwdriver.rotate_simple or nil,
 
-        tiles = {
-            "(travelnet_travelnet_front_color.png^[multiply:" .. color .. ")^travelnet_travelnet_front.png",
-            "(travelnet_travelnet_back_color.png^[multiply:" .. color .. ")^travelnet_travelnet_back.png",
-            "(travelnet_travelnet_side_color.png^[multiply:" .. color .. ")^travelnet_travelnet_side.png",
-            "travelnet_top.png",
-            "travelnet_bottom.png",
-        },
+        tiles = tiles,
 
         use_texture_alpha = "clip",
-        inventory_image = "travelnet_inv_base.png^(travelnet_inv_colorable.png^[multiply:" .. color .. ")",
+        inventory_image = inventory_image,
         groups = { cracky = 3, pickaxey = 1, transport = 1, travelnet_redo_default = 1 },
         sounds = xcompat.sounds.node_sound_glass_defaults(),
         light_source = light,
@@ -230,7 +224,15 @@ local default_travelnets = {
 }
 
 for name, cfg in pairs(default_travelnets) do
-    travelnet_redo.register_default_travelnet(name, cfg.description, cfg.color, cfg.light)
+    local tiles = {
+        "(travelnet_travelnet_front_color.png^[multiply:" .. cfg.color .. ")^travelnet_travelnet_front.png",
+        "(travelnet_travelnet_back_color.png^[multiply:" .. cfg.color .. ")^travelnet_travelnet_back.png",
+        "(travelnet_travelnet_side_color.png^[multiply:" .. cfg.color .. ")^travelnet_travelnet_side.png",
+        "travelnet_top.png",
+        "travelnet_bottom.png",
+    }
+    local inventory_image = "travelnet_inv_base.png^(travelnet_inv_colorable.png^[multiply:" .. cfg.color .. ")"
+    travelnet_redo.register_default_travelnet(name, cfg.description, tiles, inventory_image, cfg.light)
 
     if cfg.dye then
         minetest.register_craft({
