@@ -63,8 +63,24 @@ minetest.register_lbm({
     end,
 })
 
-function travelnet_redo.register_default_travelnet(name, description, tiles, inventory_image, light, sounds)
-    light = light or 10
+function travelnet_redo.boxlike_on_teleport(travelnet, node, player)
+    player:set_pos(vector.add(travelnet.pos, vector.new(0, -0.4, 0)))
+
+    local dir = vector.multiply(minetest.facedir_to_dir(node.param2), -1)
+    local yaw = minetest.dir_to_yaw(dir)
+
+    player:set_look_horizontal(yaw)
+    player:set_look_vertical(math.pi * 10 / 180)
+
+    minetest.sound_play("travelnet_travel", {
+        pos = travelnet.pos,
+        gain = 0.75,
+        max_hear_distance = 10
+    })
+end
+
+function travelnet_redo.register_boxlike_travelnet(name, def)
+    local light = def.light_source or 10
     local placeholder_name = "travelnet_redo:placeholder_" .. light
     if not placeholder_registered[light] then
         placeholder_registered[light] = true
@@ -83,8 +99,7 @@ function travelnet_redo.register_default_travelnet(name, description, tiles, inv
         })
     end
 
-    travelnet_redo.register_travelnet(name, {
-        description = description,
+    local reg_def = {
         drawtype = "mesh",
         mesh = "travelnet.obj",
         sunlight_propagates = true,
@@ -94,14 +109,7 @@ function travelnet_redo.register_default_travelnet(name, description, tiles, inv
         selection_box = node_box,
         collision_box = node_box,
         on_rotate = minetest.global_exists("screwdriver") and screwdriver.rotate_simple or nil,
-
-        tiles = tiles,
-
         use_texture_alpha = "clip",
-        inventory_image = inventory_image,
-        groups = { cracky = 3, pickaxey = 1, transport = 1, travelnet_redo_default = 1 },
-        sounds = sounds or xcompat.sounds.node_sound_glass_defaults(),
-        light_source = light,
 
         on_punch = on_punch,
 
@@ -123,21 +131,23 @@ function travelnet_redo.register_default_travelnet(name, description, tiles, inv
             end
         end,
 
-        _travelnet_on_teleport = function(travelnet, node, player)
-            player:set_pos(vector.add(travelnet.pos, vector.new(0, -0.4, 0)))
+        _travelnet_on_teleport = travelnet_redo.boxlike_on_teleport,
+    }
 
-            local dir = vector.multiply(minetest.facedir_to_dir(node.param2), -1)
-            local yaw = minetest.dir_to_yaw(dir)
+    for k, v in pairs(def) do
+        reg_def[k] = v
+    end
+    travelnet_redo.register_travelnet(name, reg_def)
+end
 
-            player:set_look_horizontal(yaw)
-            player:set_look_vertical(math.pi * 10 / 180)
-
-            minetest.sound_play("travelnet_travel", {
-                pos = travelnet.pos,
-                gain = 0.75,
-                max_hear_distance = 10
-            })
-        end,
+function travelnet_redo.register_default_travelnet(name, description, tiles, inventory_image, light, sounds)
+    travelnet_redo.register_boxlike_travelnet(name, {
+        description = description,
+        tiles = tiles,
+        inventory_image = inventory_image,
+        light_source = light or 10,
+        groups = { cracky = 3, pickaxey = 1, transport = 1, travelnet_redo_default = 1 },
+        sounds = sounds or xcompat.sounds.node_sound_glass_defaults(),
     })
 end
 
