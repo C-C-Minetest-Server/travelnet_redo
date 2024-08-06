@@ -63,7 +63,7 @@ minetest.register_lbm({
     end,
 })
 
-function travelnet_redo.register_default_travelnet(name, description, tiles, inventory_image, light)
+function travelnet_redo.register_default_travelnet(name, description, tiles, inventory_image, light, sounds)
     light = light or 10
     local placeholder_name = "travelnet_redo:placeholder_" .. light
     if not placeholder_registered[light] then
@@ -100,7 +100,7 @@ function travelnet_redo.register_default_travelnet(name, description, tiles, inv
         use_texture_alpha = "clip",
         inventory_image = inventory_image,
         groups = { cracky = 3, pickaxey = 1, transport = 1, travelnet_redo_default = 1 },
-        sounds = xcompat.sounds.node_sound_glass_defaults(),
+        sounds = sounds or xcompat.sounds.node_sound_glass_defaults(),
         light_source = light,
 
         on_punch = on_punch,
