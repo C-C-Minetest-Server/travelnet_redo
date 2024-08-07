@@ -6,12 +6,18 @@ This rewrite is based on [commit `fad216d` of mt-mods' fork](https://github.com/
 
 ## Why this fork?
 
-* Cleaner codes: Getting rid of 12 years of ancient debris hidden deep inside codes
-* (Probably?) lesser memory usage: Not having to load all networks the player owns to load one network
-* More flexibility: Allow admins to change the owner and the name (to-do) of a network easily
-* Easier sorting: Adds a sorting key field to customize the order of travelnets in the list
-* No hacky digging/removal code: Travelnets can be dug normally instead of asking for detachment in the UI
-* No more [cramped UIs](https://github.com/mt-mods/travelnet/issues/53): Using flow as the GUI library, the elements align themselves neatly
+* **No more bloated API**: You can create travelnets not only in box-like shape
+* **Cleaner codes**: Getting rid of 12 years of ancient debris hidden deep inside codes
+* **Lesser memory usage**: Not having to load all networks the player owns to load one network
+* **More flexibility**: Allow admins to change the owner and the name (to-do) of a network easily
+* **No hacky travelnet removal code**: Travelnets can be dug normally instead of asking for detachment in the UI
+* **No more [cramped UIs](https://github.com/mt-mods/travelnet/issues/53)**: Using flow as the GUI library, the elements align themselves neatly
+
+## Travelnets catalogue
+
+* Default travelnets: Original box-like travelnets that come with this mod, in 15 colors
+* [Fancy travelnets](https://content.minetest.net/packages/Emojiminetest/travelnet_redo_fancy/): Travelnets with fancy textures, magic themed
+* [Travelnet beacons](https://content.minetest.net/packages/Emojiminetest/travelnet_redo_beacons/): Single-node travelnet (not box-shaped)
 
 ## Changes
 
