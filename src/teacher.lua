@@ -19,13 +19,13 @@ teacher.register_turorial("travelnet_redo:default_travelnet", {
     },
 
     {
-        texture = "travelnet_teacher_1.png",
+        texture = "travelnet_teacher_1.jpg",
         text =
             S("Travelnets are devices providing instant transportation between distinct locations.") .. "\n\n" ..
             S("To use a travelnet, right-click a configured travelnet and select a destination.")
     },
     {
-        texture = "travelnet_teacher_2.png",
+        texture = "travelnet_teacher_2.jpg",
         text =
             S("In the interface of a travelnet, click or tap on the name of your desired destination.") .. "\n\n" ..
             S("If the background is green, you are already in this travelnet. " ..
@@ -33,7 +33,7 @@ teacher.register_turorial("travelnet_redo:default_travelnet", {
             S("If the background is red, the destination is protected. You cannot teleport there.")
     },
     {
-        texture = "travelnet_teacher_3.png",
+        texture = "travelnet_teacher_3.jpg",
         text =
             S("To set up a travelnet, place down a new travelnet and right click it. " ..
                 "Fill in the form, then click/tap save.") .. "\n\n" ..
