@@ -95,7 +95,7 @@ function travelnet_redo.register_boxlike_travelnet(name, def)
             drop = "",
             is_ground_content = false,
             collision_box = placeholder_box,
-            sounds = def.sounds,
+            sounds = xcompat.sounds.node_sound_glass_defaults(),
         })
     end
 
