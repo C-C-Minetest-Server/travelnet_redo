@@ -445,14 +445,15 @@ modlib.minetest.register_globalstep(59 + math.random(), function()
         )
 
         if not res then
-            logger:raise("Failed to list unused travelnet networks: %s", err)
+            logger:error("Failed to list unused travelnet networks: %s", err)
+            return
         end
 
         for _, data in ipairs(res) do
             local network_id = data.network_id
             local d_res, d_err = _db.delete_travelnet_network(network_id)
             if not d_res then
-                logger:raise("Failed to delete travelnet network #%i: %s", network_id, d_err)
+                logger:error("Failed to delete travelnet network #%i: %s", network_id, d_err)
             end
             cache[network_id] = nil
         end
