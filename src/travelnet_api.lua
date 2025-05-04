@@ -26,7 +26,7 @@ function travelnet_redo.gui_setup_or_tp(player, pos)
             meta:set_string("infotext",
                 S("Travelnet @1 in @2@@@3, rightclick/tap to teleport.",
                     travelnet.display_name, network.network_name, network.network_owner))
-            travelnet_redo.gui_tp:show(player, { pos = pos })
+            travelnet_redo.gui_tp_open_at(player, pos)
             return
         end
     end

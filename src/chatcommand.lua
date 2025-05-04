@@ -10,6 +10,44 @@ local logger = _int.logger:sublogger("chatcommand")
 
 local f = string.format
 
+minetest.register_chatcommand("tvnet_open", {
+    params = S("(#<network id>|<network name>@@<owner>)"),
+    privs = { teleport = true },
+    description = S("Open a travelnet network"),
+    func = function(name, param)
+        local player = minetest.get_player_by_name(name)
+        if not player then
+            return false, S("Player not found.")
+        end
+
+        local network_id
+        if param:sub(1, 1) == "#" then
+            network_id = tonumber(param:sub(2))
+            if not network_id then
+                return false, S("Invalid network ID!")
+            end
+            local network = travelnet_redo.get_network(network_id)
+            if not network then
+                return false, S("Network #@1 not found.", network_id)
+            end
+        else
+            local params = string.split(param, "@")
+            if #params ~= 2 then
+                return false
+            end
+            local network_name, network_owner = params[1], params[2]
+            local network = travelnet_redo.get_network_by_name_owner(network_name, network_owner)
+            if not network then
+                return false, S("Network @1@@@2 not found.", network_name, network_owner)
+            end
+            network_id = network.network_id
+        end
+
+        travelnet_redo.gui_tp_open_network(player, network_id)
+        return true
+    end
+})
+
 minetest.register_chatcommand("tvnet_set_always_cache", {
     param = S("<network id>"),
     privs = { server = true },

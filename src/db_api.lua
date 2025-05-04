@@ -341,6 +341,8 @@ end
 -- Helper functions
 
 function travelnet_redo.can_edit_travelnet(pos, name)
+    if not pos then return false end
+
     local node = minetest.get_node(pos)
     local def = minetest.registered_nodes[node.name]
     if not (def and def.groups and def.groups.travelnet_redo) then

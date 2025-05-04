@@ -176,14 +176,6 @@ end)
 local function generate_btn_list(player, ctx, travelnets)
     local name = player:get_player_name()
     local this_pos = ctx.pos
-    local this_travelnet = travelnet_redo.get_travelnet_from_map(this_pos)
-
-    if not this_travelnet then
-        return gui.Label {
-            label = "Network not found"
-        }
-    end
-    ctx.network_id = this_travelnet.network_id
 
     local sorted_travelnets = sort_travelnets(travelnets)
     local len_travelnets = #sorted_travelnets
@@ -195,7 +187,7 @@ local function generate_btn_list(player, ctx, travelnets)
         local prefix = string.sub(tvnet.display_name, 1, 3)
 
         -- luacheck: ignore 542
-        if vector.equals(this_pos, tvnet.pos) then
+        if this_pos and vector.equals(this_pos, tvnet.pos) then
             btns[#btns + 1] = gui.Button {
                 w = 6, h = 1,
                 label = S("[HERE] @1", tvnet.display_name),
@@ -265,38 +257,44 @@ local function simple_error(msg)
 end
 
 travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
-    if not ctx.pos then
-        return simple_error("Attempt to run gui_tp without position")
-    end
     local pos = ctx.pos
     local name = player:get_player_name(0)
-    local this = travelnet_redo.get_travelnet_from_map(pos)
-    if not this then
-        return simple_error("Attempt to run gui_tp on unconfigured travelnet")
+    local this
+    if not ctx.network_id then
+        if not pos then
+            return simple_error("No position nor network given")
+        end
+        this = travelnet_redo.get_travelnet_from_map(pos)
+        if not this then
+            return simple_error("Attempt to run gui_tp on unconfigured travelnet")
+        end
+        ctx.network_id = this.network_id
     end
 
-    local network = travelnet_redo.get_network(this.network_id)
+    local network = travelnet_redo.get_network(ctx.network_id)
     if not network then
         -- orphaned
-        local meta = minetest.get_meta(pos)
-        meta:set_string("infotext", S("Unconfigured travelnet, rightclick/tap to configure"))
-        meta:set_string("display_name", "")
-        meta:set_int("network_id", 0)
-        meta:set_string("travelnet_redo_configured", "")
+        if pos then
+            local meta = minetest.get_meta(pos)
+            meta:set_string("infotext", S("Unconfigured travelnet, rightclick/tap to configure"))
+            meta:set_string("display_name", "")
+            meta:set_int("network_id", 0)
+            meta:set_string("travelnet_redo_configured", "")
+        end
 
         return gui.VBox {
             gui.Label {
                 label = S("This travelnet is orphaned. Please set up again."),
             },
             gui.HBox {
-                gui.Button {
+                pos and gui.Button {
                     label = S("Setup"),
                     expand = true,
                     on_event = function(e_player, e_ctx)
                         travelnet_redo.gui_tp:close(e_player)
                         _int.show_on_next_step(e_player, travelnet_redo.gui_setup, { pos = e_ctx.pos })
                     end,
-                },
+                } or gui.Nil {},
                 gui.ButtonExit {
                     label = S("Exit"),
                     expand = true,
@@ -335,7 +333,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                     })
                 end,
             },
-            travelnet_redo.can_edit_travelnet(pos, name) and gui.Button {
+            pos and travelnet_redo.can_edit_travelnet(pos, name) and gui.Button {
                 w = 1, h = 0.8,
                 label = S("Edit"),
                 on_event = function(e_player, e_ctx)
@@ -359,7 +357,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
         gui.HBox {
             gui.Label {
                 w = 8,
-                label = S("Name of this travelnet: @1", this.display_name),
+                label = this and S("Name of this travelnet: @1", this.display_name) or "",
                 expand = true,
             },
             gui.Label {
@@ -376,3 +374,11 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
         generate_btn_list(player, ctx, network.travelnets)
     }
 end)
+
+function travelnet_redo.gui_tp_open_at(player, pos)
+    return travelnet_redo.gui_tp:show(player, { pos = pos })
+end
+
+function travelnet_redo.gui_tp_open_network(player, network_id)
+    return travelnet_redo.gui_tp:show(player, { network_id = network_id })
+end
