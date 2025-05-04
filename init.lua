@@ -5,10 +5,10 @@
 
 travelnet_redo = {}
 travelnet_redo.internal = {}
-travelnet_redo.internal.S = minetest.get_translator("travelnet_redo")
+travelnet_redo.internal.S = core.get_translator("travelnet_redo")
 travelnet_redo.internal.logger = logging.logger("travelnet_redo")
 
-local insecure = minetest.request_insecure_environment()
+local insecure = core.request_insecure_environment()
 if not insecure then
 	travelnet_redo.internal.logger:raise("Please add `travelnet_redo` into secure.trusted_mods.")
 end
@@ -59,7 +59,7 @@ local ngx = nil
 ---@module 'pgmoon'
 travelnet_redo.internal.pgmoon = travelnet_redo.internal.func_with_IE_env(insecure.require, "pgmoon")
 
-local MP = minetest.get_modpath("travelnet_redo")
+local MP = core.get_modpath("travelnet_redo")
 for _, name in ipairs({
 	"utils",
 	"settings",

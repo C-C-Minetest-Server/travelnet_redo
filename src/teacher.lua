@@ -3,7 +3,7 @@
 -- Copyright (C) 2024  1F616EMO
 -- SPDX-License-Identifier: GPL-3.0-or-later
 
-if not minetest.get_modpath("teacher_core") then return end
+if not core.get_modpath("teacher_core") then return end
 
 local _int = travelnet_redo.internal
 local S = _int.S

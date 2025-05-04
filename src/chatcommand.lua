@@ -10,12 +10,12 @@ local logger = _int.logger:sublogger("chatcommand")
 
 local f = string.format
 
-minetest.register_chatcommand("tvnet_open", {
+core.register_chatcommand("tvnet_open", {
     params = S("(#<network id>|<network name>@@<owner>)"),
     privs = { teleport = true },
     description = S("Open a travelnet network"),
     func = function(name, param)
-        local player = minetest.get_player_by_name(name)
+        local player = core.get_player_by_name(name)
         if not player then
             return false, S("Player not found.")
         end
@@ -48,7 +48,7 @@ minetest.register_chatcommand("tvnet_open", {
     end
 })
 
-minetest.register_chatcommand("tvnet_set_always_cache", {
+core.register_chatcommand("tvnet_set_always_cache", {
     param = S("<network id>"),
     privs = { server = true },
     description = S("Set a network to be always cached"),
@@ -70,7 +70,7 @@ minetest.register_chatcommand("tvnet_set_always_cache", {
     end
 })
 
-minetest.register_chatcommand("tvnet_unset_always_cache", {
+core.register_chatcommand("tvnet_unset_always_cache", {
     param = S("<network id>"),
     privs = { server = true },
     description = S("Set a network to no longer be always cached"),
@@ -92,7 +92,7 @@ minetest.register_chatcommand("tvnet_unset_always_cache", {
     end
 })
 
-minetest.register_chatcommand("tvnet_change_network_owner", {
+core.register_chatcommand("tvnet_change_network_owner", {
     param = S("<network id> <new owner>"),
     privs = { travelnet_attach = true, travelnet_remove = true },
     description = S("Change the owner of a network"),
@@ -121,7 +121,7 @@ minetest.register_chatcommand("tvnet_change_network_owner", {
     end
 })
 
-minetest.register_chatcommand("tvnet_sync_ndb", {
+core.register_chatcommand("tvnet_sync_ndb", {
     param = S("<network id>"),
     privs = { server = true },
     description = S("Sync travelnets with the node database"),

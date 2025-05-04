@@ -28,13 +28,13 @@ local function on_punch(pos, node, player)
         local name = player:get_player_name()
         if not travelnet_redo.can_edit_travelnet(pos, name) then return end
 
-        if not minetest.is_creative_enabled(name) then
+        if not core.is_creative_enabled(name) then
             wield:take_item()
             player:set_wielded_item(wield)
         end
 
         node.name = new_travelnet
-        minetest.swap_node(pos, node)
+        core.swap_node(pos, node)
     end
 end
 
@@ -44,21 +44,21 @@ local placeholder_box = {
 }
 local placeholder_registered = {}
 
-minetest.register_lbm({
+core.register_lbm({
     label = "Replace old Travelnet placeholders",
     name = "travelnet_redo:replace_old_placeholder",
     nodenames = { "travelnet_redo:placeholder" },
     run_at_every_load = false,
     action = function(pos, node)
         local below = vector.new(pos.x, pos.y - 1, pos.z)
-        local below_node = minetest.get_node(below)
-        local below_def = minetest.registered_nodes[below_node.name]
+        local below_node = core.get_node(below)
+        local below_def = core.registered_nodes[below_node.name]
         local light = below_def and below_def.light_source or 0
         if placeholder_registered[light] then
             node.name = "travelnet_redo:placeholder_" .. light
-            minetest.swap_node(pos, node)
+            core.swap_node(pos, node)
         else
-            minetest.remove_node(pos)
+            core.remove_node(pos)
         end
     end,
 })
@@ -66,13 +66,13 @@ minetest.register_lbm({
 function travelnet_redo.boxlike_on_teleport(travelnet, node, player)
     player:set_pos(vector.add(travelnet.pos, vector.new(0, -0.4, 0)))
 
-    local dir = vector.multiply(minetest.facedir_to_dir(node.param2), -1)
-    local yaw = minetest.dir_to_yaw(dir)
+    local dir = vector.multiply(core.facedir_to_dir(node.param2), -1)
+    local yaw = core.dir_to_yaw(dir)
 
     player:set_look_horizontal(yaw)
     player:set_look_vertical(math.pi * 10 / 180)
 
-    minetest.sound_play("travelnet_travel", {
+    core.sound_play("travelnet_travel", {
         pos = travelnet.pos,
         gain = 0.75,
         max_hear_distance = 10
@@ -84,7 +84,7 @@ function travelnet_redo.register_boxlike_travelnet(name, def)
     local placeholder_name = "travelnet_redo:placeholder_" .. light
     if not placeholder_registered[light] then
         placeholder_registered[light] = true
-        minetest.register_node(placeholder_name, {
+        core.register_node(placeholder_name, {
             drawtype = "airlike",
             paramtype = "light",
             sunlight_propagates = true,
@@ -108,26 +108,26 @@ function travelnet_redo.register_boxlike_travelnet(name, def)
         wield_scale = { x = 0.6, y = 0.6, z = 0.6 },
         selection_box = node_box,
         collision_box = node_box,
-        on_rotate = minetest.global_exists("screwdriver") and screwdriver.rotate_simple or nil,
+        on_rotate = core.global_exists("screwdriver") and screwdriver.rotate_simple or nil,
         use_texture_alpha = "clip",
 
         on_punch = on_punch,
 
         on_construct = function(pos)
             local up = vector.new(pos.x, pos.y + 1, pos.z)
-            local up_node = minetest.get_node_or_nil(up)
+            local up_node = core.get_node_or_nil(up)
             if up_node then
-                local up_def = minetest.registered_nodes[up_node.name]
+                local up_def = core.registered_nodes[up_node.name]
                 if up_def and up_def.buildable_to then
-                    minetest.set_node(up, { name = placeholder_name })
+                    core.set_node(up, { name = placeholder_name })
                 end
             end
         end,
 
         on_destruct = function(pos)
             local up = vector.new(pos.x, pos.y + 1, pos.z)
-            if minetest.get_node(up).name == placeholder_name then
-                minetest.remove_node(up)
+            if core.get_node(up).name == placeholder_name then
+                core.remove_node(up)
             end
         end,
 
@@ -151,7 +151,7 @@ function travelnet_redo.register_default_travelnet(name, description, tiles, inv
     })
 end
 
-local materials = minetest.global_exists("xcompat") and xcompat.materials or nil
+local materials = core.global_exists("xcompat") and xcompat.materials or nil
 
 local default_travelnets = {
     ["travelnet_redo:travelnet_yellow"] = {
@@ -228,7 +228,7 @@ local default_travelnets = {
     ["travelnet_redo:travelnet_white"] = {
         dye = materials and materials.dye_white,
         color = "#ffffff",
-        light = minetest.LIGHT_MAX,
+        light = core.LIGHT_MAX,
         description = S("@1 Travelnet-Box", S("White")),
     },
 }
@@ -245,7 +245,7 @@ for name, cfg in pairs(default_travelnets) do
     travelnet_redo.register_default_travelnet(name, cfg.description, tiles, inventory_image, cfg.light)
 
     if cfg.dye then
-        minetest.register_craft({
+        core.register_craft({
             output = name,
             type = "shapeless",
             recipe = { "group:travelnet_redo_default", cfg.dye },
@@ -256,7 +256,7 @@ for name, cfg in pairs(default_travelnets) do
 end
 
 if materials then
-    minetest.register_craft({
+    core.register_craft({
         output = "travelnet_redo:travelnet_yellow",
         recipe = {
             { materials.glass, materials.steel_ingot, materials.glass },

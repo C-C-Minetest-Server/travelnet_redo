@@ -12,7 +12,7 @@ function travelnet_redo.gui_setup_or_tp(player, pos)
     local travelnet = travelnet_redo.get_travelnet_from_map(pos)
     local name = player:get_player_name()
     if travelnet then
-        local meta = minetest.get_meta(pos)
+        local meta = core.get_meta(pos)
         local network = travelnet_redo.get_network(travelnet.network_id)
         if not network then
             meta:set_string("infotext", S("Unconfigured travelnet, rightclick/tap to configure"))
@@ -20,7 +20,7 @@ function travelnet_redo.gui_setup_or_tp(player, pos)
             meta:set_int("network_id", 0)
             meta:set_string("travelnet_redo_configured", "")
 
-            minetest.chat_send_player(name,
+            core.chat_send_player(name,
                 S("This travelnet is orphaned. Please set up again."))
         else
             meta:set_string("infotext",
@@ -31,15 +31,15 @@ function travelnet_redo.gui_setup_or_tp(player, pos)
         end
     end
 
-    if minetest.is_protected(pos, name) then
-        minetest.record_protection_violation(pos, name)
+    if core.is_protected(pos, name) then
+        core.record_protection_violation(pos, name)
         return
     end
     travelnet_redo.gui_setup:show(player, { pos = pos })
 end
 
 function travelnet_redo.on_construct(pos)
-    local meta = minetest.get_meta(pos)
+    local meta = core.get_meta(pos)
     meta:set_string("infotext", S("Unconfigured travelnet, rightclick/tap to configure"))
 end
 
@@ -73,7 +73,7 @@ end
 ---@param network travelnet_redo.TravelnetNetwork
 ---@param node { name: string, param1: integer, param2: integer }
 function travelnet_redo.default_on_setup(travelnet, network, _)
-    local meta = minetest.get_meta(travelnet.pos)
+    local meta = core.get_meta(travelnet.pos)
     meta:set_string("infotext", S("Travelnet @1 in @2@@@3, rightclick/tap to teleport.",
         travelnet.display_name, network.network_name, network.network_owner))
 end
@@ -92,7 +92,7 @@ local function add_or_run_after(tb, key, func)
     end
 end
 
-if minetest.global_exists("mesecons") then
+if core.global_exists("mesecons") then
     mesecon.register_mvps_stopper("travelnet_redo:placeholder")
 end
 
@@ -109,9 +109,9 @@ function travelnet_redo.register_travelnet(name, def)
     def.groups.travelnet_redo = 1
     def.is_ground_content = false
 
-    minetest.register_node(name, def)
+    core.register_node(name, def)
 
-    if minetest.global_exists("mesecons") then
+    if core.global_exists("mesecons") then
         mesecon.register_mvps_stopper(name)
     end
 end

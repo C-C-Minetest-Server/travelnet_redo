@@ -42,12 +42,12 @@ _int.cache = cache
 -- Read functions
 
 -- function travelnet_redo.get_travelnet_in_db(pos)
---     local hash = minetest.hash_node_position(pos)
+--     local hash = core.hash_node_position(pos)
 --     local res, err = _db.get_travelnet_by_hash(hash)
 
 --     if not res then
 --         logger:raise(f("Failed to get travelnet at %s: %s",
---             minetest.pos_to_string(pos), err))
+--             core.pos_to_string(pos), err))
 --     end
 
 --     return {
@@ -61,7 +61,7 @@ _int.cache = cache
 ---Get travelnet from the map
 ---@return travelnet_redo.Travelnet?
 function travelnet_redo.get_travelnet_from_map(pos)
-    local meta = minetest.get_meta(pos)
+    local meta = core.get_meta(pos)
 
     if meta:get_string("travelnet_redo_configured") == "" then
         return nil
@@ -88,7 +88,7 @@ function travelnet_redo.get_travelnet_by_name_id(display_name, network_id)
     if #res == 0 then return nil end
 
     return {
-        pos = minetest.get_position_from_hash(res[1].tvnet_pos_hash),
+        pos = core.get_position_from_hash(res[1].tvnet_pos_hash),
         display_name = res[1].tvnet_display_name,
         network_id = network_id,
         sort_key = res[1].tvnet_sort_key,
@@ -109,7 +109,7 @@ function travelnet_redo.get_travelnets_in_network(network_id)
     local rtn = {}
     for _, data in ipairs(res) do
         rtn[data.tvnet_pos_hash] = {
-            pos = minetest.get_position_from_hash(data.tvnet_pos_hash),
+            pos = core.get_position_from_hash(data.tvnet_pos_hash),
             display_name = data.tvnet_display_name,
             network_id = data.tvnet_network_id,
             sort_key = data.tvnet_sort_key,
@@ -185,15 +185,15 @@ end
 function travelnet_redo.add_travelnet(pos, display_name, network_id, sort_key)
     sort_key = sort_key or 0
 
-    local pos_hash = minetest.hash_node_position(pos)
+    local pos_hash = core.hash_node_position(pos)
     local res, err = _db.add_travelnet(pos_hash, display_name, network_id, sort_key)
 
     if not res then
         logger:raise("Failed to add travelnet at %s: %s",
-            minetest.pos_to_string(pos), err)
+            core.pos_to_string(pos), err)
     end
 
-    local meta = minetest.get_meta(pos)
+    local meta = core.get_meta(pos)
     meta:set_string("travelnet_redo_configured", "1")
     meta:set_string("display_name", display_name)
     meta:set_int("network_id", network_id)
@@ -214,18 +214,18 @@ end
 
 function travelnet_redo.update_travelnet(pos, display_name, network_id, sort_key, old_network_id)
     sort_key = sort_key or 0
-    local meta = minetest.get_meta(pos)
+    local meta = core.get_meta(pos)
     if meta:get_string("travelnet_redo_configured") == "" then
         logger:raise("Failed to update travelnet at %s: %s",
-            minetest.pos_to_string(pos), "Calling update_travelnet on unconfigured travelnet")
+            core.pos_to_string(pos), "Calling update_travelnet on unconfigured travelnet")
     end
 
-    local pos_hash = minetest.hash_node_position(pos)
+    local pos_hash = core.hash_node_position(pos)
     local res, err = _db.update_travelnet(pos_hash, display_name, network_id, sort_key)
 
     if not res then
         logger:raise("Failed to update travelnet at %s: %s",
-            minetest.pos_to_string(pos), err)
+            core.pos_to_string(pos), err)
     end
 
     meta:set_string("display_name", display_name)
@@ -249,18 +249,18 @@ function travelnet_redo.update_travelnet(pos, display_name, network_id, sort_key
 end
 
 function travelnet_redo.remove_travelnet(pos, network_id)
-    local meta = minetest.get_meta(pos)
+    local meta = core.get_meta(pos)
     if meta:get_string("travelnet_redo_configured") == "" then
         logger:raise("Failed to remove travelnet at %s: %s",
-            minetest.pos_to_string(pos), "Calling remove_travelnet on unconfigured travelnet")
+            core.pos_to_string(pos), "Calling remove_travelnet on unconfigured travelnet")
     end
 
-    local pos_hash = minetest.hash_node_position(pos)
+    local pos_hash = core.hash_node_position(pos)
     local res, err = _db.remove_travelnet(pos_hash)
 
     if not res then
         logger:raise("Failed to remove travelnet at %s: %s",
-            minetest.pos_to_string(pos), err)
+            core.pos_to_string(pos), err)
     end
 
     meta:set_string("infotext", S("Unconfigured travelnet, rightclick/tap to configure"))
@@ -343,20 +343,20 @@ end
 function travelnet_redo.can_edit_travelnet(pos, name)
     if not pos then return false end
 
-    local node = minetest.get_node(pos)
-    local def = minetest.registered_nodes[node.name]
+    local node = core.get_node(pos)
+    local def = core.registered_nodes[node.name]
     if not (def and def.groups and def.groups.travelnet_redo) then
         return false
     end
 
-    if minetest.check_player_privs(name, { travelnet_remove = true }) then
+    if core.check_player_privs(name, { travelnet_remove = true }) then
         return true
     end
 
     local tvnet = travelnet_redo.get_travelnet_from_map(pos)
     if not tvnet then
-        if minetest.is_protected(pos, name) then
-            minetest.record_protection_violation(pos, name)
+        if core.is_protected(pos, name) then
+            core.record_protection_violation(pos, name)
             return false
         end
         return true
@@ -365,7 +365,7 @@ function travelnet_redo.can_edit_travelnet(pos, name)
     local network = travelnet_redo.get_network(tvnet.network_id)
     if network
         and network.network_owner ~= name
-        and not minetest.check_player_privs(name, { travelnet_attach = true }) then
+        and not core.check_player_privs(name, { travelnet_attach = true }) then
         return false
     end
     return true
@@ -386,12 +386,12 @@ function travelnet_redo.sync_ndb()
     end
 
     for _, travelnet in ipairs(res) do
-        local pos = minetest.get_position_from_hash(travelnet.tvnet_pos_hash)
-        local node = minetest.get_node(pos)
-        local node_def = minetest.registered_nodes[node.name]
+        local pos = core.get_position_from_hash(travelnet.tvnet_pos_hash)
+        local node = core.get_node(pos)
+        local node_def = core.registered_nodes[node.name]
         if node_def and node_def.groups and node_def.groups.travelnet_redo == 1 then
             local map_travelnet = travelnet_redo.get_travelnet_from_map(pos)
-            local meta = minetest.get_meta(pos)
+            local meta = core.get_meta(pos)
             if not map_travelnet
                 or map_travelnet.network_id ~= travelnet.tvnet_network_id
                 or map_travelnet.display_name ~= travelnet.tvnet_display_name

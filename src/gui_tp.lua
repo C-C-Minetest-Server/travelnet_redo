@@ -9,7 +9,7 @@ local S = _int.S
 -- local logger = _int.logger:sublogger("gui_tp")
 
 local gui = flow.widgets
-local hud = minetest.global_exists("mhud") and mhud.init()
+local hud = core.global_exists("mhud") and mhud.init()
 
 local f = string.format
 local lower = string.lower
@@ -72,10 +72,10 @@ local function emerge_and_callback(name, pos, callback)
     local maxp = vector.add(pos, 16)
 
     local stop_exec = false
-    minetest.emerge_area(minp, maxp, function(blockpos, _, calls_remaining, _)
+    core.emerge_area(minp, maxp, function(blockpos, _, calls_remaining, _)
         if stop_exec then return end
 
-        local player = minetest.get_player_by_name(name)
+        local player = core.get_player_by_name(name)
         if not player then -- Went offline?
             stop_exec = true
             return
@@ -95,33 +95,33 @@ end
 local teleporting = {}
 local function btn_event_tp_to(tp_pos)
     return function(player, ctx)
-        local hash = minetest.hash_node_position(tp_pos)
+        local hash = core.hash_node_position(tp_pos)
         local network = travelnet_redo.get_network(ctx.network_id)
         local travelnet = network.travelnets[hash]
         if travelnet then
             local name = player:get_player_name()
             local prefix = string.sub(travelnet.display_name, 1, 3)
             if teleporting[name] then
-                ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+                ctx.errmsg = core.get_color_escape_sequence("red") ..
                     S("Too fast!")
                 return true
             elseif prefix == "(P)"
-                and minetest.is_protected(travelnet.pos, name)
+                and core.is_protected(travelnet.pos, name)
                 and not travelnet_redo.can_edit_travelnet(travelnet.pos, name) then
-                minetest.record_protection_violation(travelnet.pos, name)
-                ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+                core.record_protection_violation(travelnet.pos, name)
+                ctx.errmsg = core.get_color_escape_sequence("red") ..
                     S("Travelnet @1: Position protected!", travelnet.display_name)
                 return true
             elseif prefix == "(I)"
                 and not travelnet_redo.can_edit_travelnet(travelnet.pos, name) then
-                ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+                ctx.errmsg = core.get_color_escape_sequence("red") ..
                     S("Travelnet @1: You cannot exit from this tgravelnet!", travelnet.display_name)
                 return true
             end
 
             local callback = function()
-                local node = minetest.get_node(travelnet.pos)
-                local def = minetest.registered_nodes[node.name]
+                local node = core.get_node(travelnet.pos)
+                local def = core.registered_nodes[node.name]
                 local tp_func = def and def._travelnet_on_teleport or travelnet_redo.default_on_teleport
                 tp_func(travelnet, node, player)
 
@@ -143,7 +143,7 @@ local function btn_event_tp_to(tp_pos)
                     hud:remove(player, hudname)
                 end
             end
-            if minetest.global_exists("background_music") then
+            if core.global_exists("background_music") then
                 local old_callback = callback
                 callback = function()
                     old_callback()
@@ -151,19 +151,19 @@ local function btn_event_tp_to(tp_pos)
                 end
             end
             teleporting[name] = true
-            minetest.chat_send_player(name,
-                minetest.colorize("#FFD700", S("Teleporting to @1...", travelnet.display_name)))
+            core.chat_send_player(name,
+                core.colorize("#FFD700", S("Teleporting to @1...", travelnet.display_name)))
             emerge_and_callback(name, travelnet.pos, callback)
             travelnet_redo.gui_tp:close(player)
         else
-            ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+            ctx.errmsg = core.get_color_escape_sequence("red") ..
                 S("Travelnet @1: Not Found!", travelnet.display_name)
             return true
         end
     end
 end
 
-minetest.register_on_leaveplayer(function(player)
+core.register_on_leaveplayer(function(player)
     local name = player:get_player_name()
     teleporting[name] = nil
 end)
@@ -192,7 +192,7 @@ local function generate_btn_list(player, ctx, travelnets)
                 w = 6, h = 1,
                 label = S("[HERE] @1", tvnet.display_name),
                 on_event = function(_, e_ctx)
-                    e_ctx.errmsg = minetest.get_color_escape_sequence("green") ..
+                    e_ctx.errmsg = core.get_color_escape_sequence("green") ..
                         S("You are already at @1!", tvnet.display_name)
                     return true
                 end,
@@ -204,14 +204,14 @@ local function generate_btn_list(player, ctx, travelnets)
             and not travelnet_redo.can_edit_travelnet(tvnet.pos, name) then
             -- Enter only
         elseif prefix == "(P)"
-            and minetest.is_protected(tvnet.pos, name)
+            and core.is_protected(tvnet.pos, name)
             and not travelnet_redo.can_edit_travelnet(tvnet.pos, name) then
             -- Protected
             btns[#btns + 1] = gui.Button {
                 w = 6, h = 1,
                 label = tvnet.display_name,
                 on_event = function(_, e_ctx)
-                    e_ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+                    e_ctx.errmsg = core.get_color_escape_sequence("red") ..
                         S("Travelnet @1 is protected!", tvnet.display_name)
                     return true
                 end,
@@ -275,7 +275,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
     if not network then
         -- orphaned
         if pos then
-            local meta = minetest.get_meta(pos)
+            local meta = core.get_meta(pos)
             meta:set_string("infotext", S("Unconfigured travelnet, rightclick/tap to configure"))
             meta:set_string("display_name", "")
             meta:set_int("network_id", 0)
@@ -314,7 +314,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                 label = S("Travelnet-box Teleport Interface"),
                 expand = true, align_h = "left",
             },
-            minetest.get_modpath("teacher_core") and gui.Button {
+            core.get_modpath("teacher_core") and gui.Button {
                 label = "?",
                 w = 1, h = 1,
                 on_event = function(e_player)
@@ -339,7 +339,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                 on_event = function(e_player, e_ctx)
                     local e_name = e_player:get_player_name()
                     if not travelnet_redo.can_edit_travelnet(e_ctx.pos, e_name) then
-                        ctx.errmsg = minetest.get_color_escape_sequence("red") ..
+                        ctx.errmsg = core.get_color_escape_sequence("red") ..
                             S("You can't edit this travelnet.")
                         return true
                     end

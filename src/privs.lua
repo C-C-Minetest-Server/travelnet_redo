@@ -6,12 +6,12 @@
 local _int = travelnet_redo.internal
 local S = _int.S
 
-minetest.register_privilege("travelnet_attach", {
+core.register_privilege("travelnet_attach", {
     description = S("Allows to attach travelnet boxes to travelnets of other players"),
     give_to_singleplayer = false
 })
 
-minetest.register_privilege("travelnet_remove", {
+core.register_privilege("travelnet_remove", {
     description = S("Allows to dig travelnet boxes which belog to nets of other players"),
     give_to_singleplayer = false
 })

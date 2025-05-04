@@ -31,7 +31,7 @@ end
 
 do
     -- Load initial schema
-    local file = assert(io.open(minetest.get_modpath("travelnet_redo") .. "/init.sql"))
+    local file = assert(io.open(core.get_modpath("travelnet_redo") .. "/init.sql"))
     local q = file:read("*a")
     file:close()
 
@@ -185,6 +185,6 @@ function _db.remove_travelnet(pos_hash)
         pos_hash))
 end
 
-minetest.register_on_shutdown(function()
+core.register_on_shutdown(function()
     _int.func_with_IE_env(postgres.disconnect, postgres)
 end)

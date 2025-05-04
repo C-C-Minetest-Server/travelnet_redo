@@ -7,13 +7,13 @@
 local _int = travelnet_redo.internal
 
 local function safe_player_after(func, pname, ...)
-    local player = minetest.get_player_by_name(pname)
+    local player = core.get_player_by_name(pname)
     if player then
         func(player, ...)
     end
 end
 function _int.safe_player_after(delay, func, player, ...)
-    return minetest.after(delay, safe_player_after, func, player:get_player_name(), ...)
+    return core.after(delay, safe_player_after, func, player:get_player_name(), ...)
 end
 
 local function show_on_next_step(player, gui, ctx)

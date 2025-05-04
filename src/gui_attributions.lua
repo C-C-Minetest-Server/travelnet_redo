@@ -51,7 +51,7 @@ local easteregg_text = [[
 
 local full_text
 do
-    local file = io.open(minetest.get_modpath("travelnet_redo") .. DIR_DELIM .. "gpl-3.0.txt", "r")
+    local file = io.open(core.get_modpath("travelnet_redo") .. DIR_DELIM .. "gpl-3.0.txt", "r")
     if file then
         full_text = file:read("*a")
         file:close()

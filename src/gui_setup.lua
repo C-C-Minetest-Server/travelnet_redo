@@ -11,8 +11,8 @@ local logger = _int.logger:sublogger("gui_setup")
 local gui = flow.widgets
 
 local function check_can_setup(name, pos)
-    local node = minetest.get_node(pos)
-    local def = minetest.registered_nodes[node.name]
+    local node = core.get_node(pos)
+    local def = core.registered_nodes[node.name]
     if not (def and def.groups and def.groups.travelnet_redo) then
         return "Attempt to run gui_setup on non-travelnet"
     end
@@ -21,8 +21,8 @@ local function check_can_setup(name, pos)
         return "Attempt to run gui_setup on configured travelnet"
     end
 
-    if minetest.is_protected(pos, name) then
-        minetest.record_protection_violation(pos, name)
+    if core.is_protected(pos, name) then
+        core.record_protection_violation(pos, name)
         return "Attempt to set up travelnet not owned by you"
     end
 end
@@ -43,7 +43,7 @@ local function on_save(player, ctx)
     local pos = ctx.pos
     local rtnmsg = check_can_setup(name, pos)
     if rtnmsg then
-        minetest.chat_send_player(name, rtnmsg)
+        core.chat_send_player(name, rtnmsg)
         travelnet_redo.gui_setup:close(player)
         return
     end
@@ -69,7 +69,7 @@ local function on_save(player, ctx)
     elseif string.len(network_name) > 40 then
         ctx.errmsg = S("Length of network name cannot exceed 40")
         return true
-    elseif network_owner ~= name and not minetest.check_player_privs(name, { travelnet_attach = true }) then
+    elseif network_owner ~= name and not core.check_player_privs(name, { travelnet_attach = true }) then
         ctx.errmsg = S("Insufficant privilege to attach travelnets!")
         return true
     elseif string.len(network_owner) > 20 then
@@ -88,13 +88,13 @@ local function on_save(player, ctx)
     end
     local travelnet = travelnet_redo.add_travelnet(pos, display_name, network_id, sort_key)
 
-    local node = minetest.get_node(pos)
-    local def  = minetest.registered_nodes[node.name]
+    local node = core.get_node(pos)
+    local def  = core.registered_nodes[node.name]
     local func = def and def._tvnet_on_setup or travelnet_redo.default_on_setup
     func(travelnet, travelnet_redo.get_network(network_id), node)
 
     logger:action("%s set up travelnet at %s, name = %s, network = %s@%s (#%d), sort_key = %d",
-        name, minetest.pos_to_string(pos), display_name, network_name, network_owner, network_id, sort_key
+        name, core.pos_to_string(pos), display_name, network_name, network_owner, network_id, sort_key
     )
     travelnet_redo.gui_setup:close(player)
     _int.show_on_next_step(player, travelnet_redo.gui_tp, { pos = pos })
@@ -124,7 +124,7 @@ travelnet_redo.gui_setup = flow.make_gui(function(player, ctx)
                 label = S("Configure this travelnet station"),
                 expand = true, align_h = "left",
             },
-            minetest.get_modpath("teacher_core") and gui.Button {
+            core.get_modpath("teacher_core") and gui.Button {
                 label = "?",
                 w = 0.7, h = 0.7,
                 on_event = function(e_player)
@@ -152,7 +152,7 @@ travelnet_redo.gui_setup = flow.make_gui(function(player, ctx)
 
         -- Contents
         errmsg and gui.Label {
-            label = minetest.colorize("red", errmsg),
+            label = core.colorize("red", errmsg),
         } or gui.Nil {},
 
         gui.Label {

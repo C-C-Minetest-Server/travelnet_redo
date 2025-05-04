@@ -22,8 +22,8 @@ local function simple_error(msg)
 end
 
 function travelnet_redo.check_can_edit(name, pos)
-    local node = minetest.get_node(pos)
-    local def = minetest.registered_nodes[node.name]
+    local node = core.get_node(pos)
+    local def = core.registered_nodes[node.name]
     if not (def and def.groups and def.groups.travelnet_redo) then
         return false, "Attempt to run gui_edit on non-travelnet"
     end
@@ -33,7 +33,7 @@ function travelnet_redo.check_can_edit(name, pos)
         return false, "Attempt to run gui_edit on unconfigured travelnet"
     end
 
-    if travelnet.owner ~= name and not minetest.check_player_privs(name, { travelnet_attach = true }) then
+    if travelnet.owner ~= name and not core.check_player_privs(name, { travelnet_attach = true }) then
         return false, "Attempt to edit other's travelnet"
     end
 
@@ -44,7 +44,7 @@ local function on_save(player, ctx)
     local name = player:get_player_name()
     local pos = ctx.pos
     if not travelnet_redo.can_edit_travelnet(pos, name) then
-        minetest.chat_send_player(name, S("You can't edit this travelnet."))
+        core.chat_send_player(name, S("You can't edit this travelnet."))
         travelnet_redo.gui_edit:close(player)
         return
     end
@@ -70,7 +70,7 @@ local function on_save(player, ctx)
     elseif string.len(network_name) > 40 then
         ctx.errmsg = S("Length of network name cannot exceed 40")
         return true
-    elseif network_owner ~= name and not minetest.check_player_privs(name, { travelnet_attach = true }) then
+    elseif network_owner ~= name and not core.check_player_privs(name, { travelnet_attach = true }) then
         ctx.errmsg = S("Insufficant privilege to attach travelnets!")
         return true
     elseif string.len(network_owner) > 20 then
@@ -84,10 +84,10 @@ local function on_save(player, ctx)
     local network_id = travelnet_redo.create_or_get_network(network_name, network_owner)
     local old_travelnet = travelnet_redo.get_travelnet_from_map(pos)
     travelnet_redo.update_travelnet(pos, display_name, network_id, sort_key, old_travelnet.network_id)
-    minetest.chat_send_player(name, S("Successfully updated travelnet."))
+    core.chat_send_player(name, S("Successfully updated travelnet."))
 
     logger:action("%s edited travelnet at %s, name = %s, network = %s@%s (#%d), sort_key = %d",
-        name, minetest.pos_to_string(pos), display_name, network_name, network_owner, network_id, sort_key
+        name, core.pos_to_string(pos), display_name, network_name, network_owner, network_id, sort_key
     )
     travelnet_redo.gui_edit:close(player)
     _int.show_on_next_step(player, travelnet_redo.gui_tp, { pos = pos })
@@ -120,7 +120,7 @@ travelnet_redo.gui_edit = flow.make_gui(function(player, ctx)
                 label = S("Edit this travelnet station"),
                 expand = true, align_h = "left",
             },
-            minetest.get_modpath("teacher_core") and gui.Button {
+            core.get_modpath("teacher_core") and gui.Button {
                 label = "?",
                 w = 0.7, h = 0.7,
                 on_event = function(e_player)
@@ -148,7 +148,7 @@ travelnet_redo.gui_edit = flow.make_gui(function(player, ctx)
 
         -- Contents
         errmsg and gui.Label {
-            label = minetest.colorize("red", errmsg),
+            label = core.colorize("red", errmsg),
         } or gui.Nil {},
 
         gui.Label {
