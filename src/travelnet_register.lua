@@ -146,7 +146,13 @@ function travelnet_redo.register_default_travelnet(name, description, tiles, inv
         tiles = tiles,
         inventory_image = inventory_image,
         light_source = light or 10,
-        groups = { cracky = 3, pickaxey = 1, transport = 1, travelnet_redo_default = 1 },
+        groups = {
+            cracky = 3,
+            pickaxey = 1,
+            transport = 1,
+            travelnet_redo_default = 1,
+            travelnet_redo_walkin_open = 1
+        },
         sounds = sounds or xcompat.sounds.node_sound_glass_defaults(),
     })
 end
@@ -265,3 +271,42 @@ if materials then
         }
     })
 end
+
+-- travelnet_redo_walkin_open
+
+local last_seen_pos = {}
+
+modlib.minetest.register_globalstep(0.5, function()
+    if not travelnet_redo.settings.walkin_open then return end
+    for _, player in ipairs(core.get_connected_players()) do
+        local name = player:get_player_name()
+        local last_seen = last_seen_pos[name]
+        local pos = vector.round(player:get_pos())
+        if last_seen and not vector.equals(last_seen, pos) then
+            local node = core.get_node(pos)
+            local def = core.registered_nodes[node.name]
+            local groups = def and def.groups
+            if groups and groups.travelnet_redo_walkin_open then
+                local travelnet = travelnet_redo.get_travelnet_from_map(pos)
+                if travelnet then
+                    local network = travelnet_redo.get_network(travelnet.network_id)
+                    if network then
+                        travelnet_redo.gui_tp_open_at(player, pos)
+                    end
+                end
+            end
+        end
+        last_seen_pos[name] = pos
+    end
+end)
+
+travelnet_redo.register_on_teleport(function(player, _, travelnet)
+    local name = player:get_player_name()
+    local pos = travelnet.pos
+    last_seen_pos[name] = pos
+end)
+
+core.register_on_leaveplayer(function(player)
+    local name = player:get_player_name()
+    last_seen_pos[name] = nil
+end)

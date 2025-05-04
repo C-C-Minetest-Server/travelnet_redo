@@ -64,6 +64,7 @@ for _, name in ipairs({
 	"utils",
 	"settings",
 	"privs",
+	"register",
 	"db",              -- depends: settings
 	"db_api",          -- depends: db
 	"gui_attributions",

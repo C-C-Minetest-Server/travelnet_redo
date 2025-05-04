@@ -22,6 +22,10 @@ settings_loader.load_settings("travelnet_redo.", {
     default_network = {
         stype = "string",
         default = "net1",
+    },
+    walkin_open = {
+        stype = "boolean",
+        default = false,
     }
 }, true, settings)
 

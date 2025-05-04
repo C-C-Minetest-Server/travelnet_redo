@@ -125,6 +125,12 @@ local function btn_event_tp_to(tp_pos)
                 local tp_func = def and def._travelnet_on_teleport or travelnet_redo.default_on_teleport
                 tp_func(travelnet, node, player)
 
+                for _, func in ipairs(travelnet_redo.regsitered_on_teleport) do
+                    if func then
+                        func(player, network, travelnet)
+                    end
+                end
+
                 teleporting[name] = nil
             end
             if hud then
