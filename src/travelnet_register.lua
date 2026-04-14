@@ -64,6 +64,12 @@ core.register_lbm({
 })
 
 function travelnet_redo.boxlike_on_teleport(travelnet, node, player)
+    -- Prevent slamming onto the ground causing death if teleporting mid-fall
+    -- and other velocity problems.
+    local vel = player:get_velocity()
+    local add_vel = vector.multiply(vel, -1)
+    player:add_velocity(add_vel)
+
     player:set_pos(vector.add(travelnet.pos, vector.new(0, -0.4, 0)))
 
     local dir = vector.multiply(core.facedir_to_dir(node.param2), -1)
