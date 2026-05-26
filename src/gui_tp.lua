@@ -309,6 +309,56 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
         }
     end
 
+    if ctx.page == "detach" then
+        return gui.VBox {
+            gui.Label {
+                label = S("Are you sure you want to detach this travelnet?"),
+            },
+            gui.HBox {
+                gui.Button {
+                    label = S("Cancel"),
+                    expand = true,
+                    on_event = function(_, e_ctx)
+                        e_ctx.page = nil
+                        return true
+                    end,
+                    style = {
+                        bgcolor = "#32CD32" -- Green
+                    },
+                },
+                gui.Button {
+                    label = S("Confirm"),
+                    expand = true,
+                    on_event = function(e_player, e_ctx)
+                        if not travelnet_redo.can_edit_travelnet(e_ctx.pos, e_player:get_player_name()) then
+                            e_ctx.errmsg = core.get_color_escape_sequence("red") ..
+                                S("You can't edit this travelnet.")
+                            e_ctx.page = nil
+
+                            return true
+                        end
+
+                        local m_travelnet = travelnet_redo.get_travelnet_from_map(e_ctx.pos)
+                        if m_travelnet then
+                            local m_network = travelnet_redo.get_network(e_ctx.network_id)
+                            travelnet_redo.remove_travelnet(e_ctx.pos, m_travelnet.network_id)
+
+                            core.chat_send_player(e_player:get_player_name(),
+                                S("Successfully detached travelnet \"@1\" at @2 from @3@@@4.",
+                                    m_travelnet.display_name, core.pos_to_string(e_ctx.pos),
+                                    m_network.network_name, m_network.network_owner))
+                        end
+
+                        travelnet_redo.gui_tp:close(e_player)
+                    end,
+                    style = {
+                        bgcolor = "red"
+                    },
+                }
+            }
+        }
+    end
+
     local errmsg = ctx.errmsg
     ctx.errmsg = nil
 
@@ -352,6 +402,21 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
 
                     travelnet_redo.gui_tp:close(e_player)
                     _int.show_on_next_step(e_player, travelnet_redo.gui_edit, { pos = e_ctx.pos })
+                end,
+            } or gui.Nil {},
+            pos and travelnet_redo.can_edit_travelnet(pos, name) and gui.Button {
+                w = 1, h = 0.8,
+                label = S("Detach"),
+                on_event = function(e_player, e_ctx)
+                    local e_name = e_player:get_player_name()
+                    if not travelnet_redo.can_edit_travelnet(e_ctx.pos, e_name) then
+                        ctx.errmsg = core.get_color_escape_sequence("red") ..
+                            S("You can't edit this travelnet.")
+                        return true
+                    end
+
+                    e_ctx.page = "detach"
+                    return true
                 end,
             } or gui.Nil {},
             gui.ButtonExit {

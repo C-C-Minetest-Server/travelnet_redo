@@ -1,10 +1,14 @@
 # textdomain: travelnet_redo
 
 ##[ src/chatcommand.lua ]##
-<network id>=
-Set a network to be always cached=
+(#<network id>|<network name>@@<owner>)=
+Open a travelnet network=
+Player not found.=
 Invalid network ID!=
 Network #@1 not found.=
+Network @1@@@2 not found.=
+<network id>=
+Set a network to be always cached=
 Successfully set network @1@@@2 (#@3) to be always cached.=
 Set a network to no longer be always cached=
 Successfully set network @1@@@2 (#@3) to no longer be always cached.=
@@ -16,14 +20,13 @@ Sync travelnets with the node database=
 Travelnet node database synchronized. (Restored @1, removed @2, used @3 ms)=
 
 ##[ src/db_api.lua ]##
-##[ src/gui_setup.lua ]##
-##[ src/travelnet_api.lua ]##
-Travelnet @1 in @2@@@3, rightclick/tap to teleport.=
-
-##[ src/db_api.lua ]##
 ##[ src/gui_tp.lua ]##
 ##[ src/travelnet_api.lua ]##
 Unconfigured travelnet, rightclick/tap to configure=
+
+##[ src/db_api.lua ]##
+##[ src/travelnet_api.lua ]##
+Travelnet @1 in @2@@@3, rightclick/tap to teleport.=
 
 ##[ src/gui_attributions.lua ]##
 Error reading license text. For full text, see @1.=
@@ -39,6 +42,7 @@ Exit=
 ##[ src/gui_edit.lua ]##
 Successfully updated travelnet.=
 Edit this travelnet station=
+To remove this travelnet, dig the node.@nThe network is deleted after removing all associated travelnets.=
 Abort=
 
 ##[ src/gui_edit.lua ]##
@@ -78,8 +82,13 @@ Travelnet @1: Not Found!=
 You are already at @1!=
 Travelnet @1 is protected!=
 Setup=
+Are you sure you want to detach this travelnet?=
+Cancel=
+Confirm=
+Successfully detached travelnet "@1" at @2 from @3@@@4.=
 Travelnet Teleport Interface=
 Edit=
+Detach=
 Name of this travelnet: @1=
 Network attached: @1@@@2 (#@3)=
 Click or tap on the destion you want to go to.=
@@ -101,6 +110,7 @@ If the background is green, you are already in this travelnet. There is no point
 If the background is red, the destination is protected. You cannot teleport there.=
 To set up a travelnet, place down a new travelnet and right click it. Fill in the form, then click/tap save.=
 To edit an existing travelnet, right click it then click/tap edit. To remove one, dig the travelnet.=
+Prepend a travelnet's name with "@1" so others cannot teleport to this travelnet.=
 
 ##[ src/travelnet_register.lua ]##
 @1 Travelnet-Box=
