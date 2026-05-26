@@ -317,7 +317,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
         gui.HBox {
             gui.Label {
                 w = 9, h = 0.5,
-                label = S("Travelnet-box Teleport Interface"),
+                label = S("Travelnet Teleport Interface"),
                 expand = true, align_h = "left",
             },
             core.get_modpath("teacher_core") and gui.Button {
