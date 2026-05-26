@@ -66,6 +66,12 @@ end
 ---@param node { name: string, param1: integer, param2: integer }
 ---@param player ObjectRef
 function travelnet_redo.default_on_teleport(travelnet, _, player)
+    -- Prevent slamming onto the ground causing death if teleporting mid-fall
+    -- and other velocity problems.
+    local vel = player:get_velocity()
+    local add_vel = vector.multiply(vel, -1)
+    player:add_velocity(add_vel)
+
     player:set_pos(travelnet.pos)
 end
 
