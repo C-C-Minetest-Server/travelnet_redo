@@ -1,0 +1,411 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the travelnet_redo package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: travelnet_redo\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-26 11:05+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/chatcommand.lua
+msgid "(#<network id>|<network name>@@<owner>)"
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "Open a travelnet network"
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "Player not found."
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "Invalid network ID!"
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "Network #@1 not found."
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "Network @1@@@2 not found."
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "<network id>"
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "Set a network to be always cached"
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "Successfully set network @1@@@2 (#@3) to be always cached."
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "Set a network to no longer be always cached"
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "Successfully set network @1@@@2 (#@3) to no longer be always cached."
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "<network id> <new owner>"
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "Change the owner of a network"
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "Invalid usage, see /help @1"
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "Successfully transfered network @1 (#@2) from @3 to @4."
+msgstr ""
+
+#: src/chatcommand.lua
+msgid "Sync travelnets with the node database"
+msgstr ""
+
+#: src/chatcommand.lua
+msgid ""
+"Travelnet node database synchronized. (Restored @1, removed @2, used @3 ms)"
+msgstr ""
+
+#: src/db_api.lua src/gui_tp.lua src/travelnet_api.lua
+msgid "Unconfigured travelnet, rightclick/tap to configure"
+msgstr ""
+
+#: src/db_api.lua src/travelnet_api.lua
+msgid "Travelnet @1 in @2@@@3, rightclick/tap to teleport."
+msgstr ""
+
+#: src/gui_attributions.lua
+msgid "Error reading license text. For full text, see @1."
+msgstr ""
+
+#: src/gui_attributions.lua
+msgid "Licenses of Travelnet Redo"
+msgstr ""
+
+#: src/gui_attributions.lua
+msgid "Back"
+msgstr ""
+
+#: src/gui_attributions.lua src/gui_edit.lua src/gui_setup.lua src/gui_tp.lua
+msgid "Exit"
+msgstr ""
+
+#: src/gui_edit.lua src/gui_tp.lua
+msgid "You can't edit this travelnet."
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Display name not given"
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Network name not given"
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Length of display name cannot exceed 40"
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Length of network name cannot exceed 40"
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Insufficant privilege to attach travelnets!"
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Length of owner name cannot exceed 20"
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Invalid sorting key!"
+msgstr ""
+
+#: src/gui_edit.lua
+msgid "Successfully updated travelnet."
+msgstr ""
+
+#: src/gui_edit.lua
+msgid "Edit this travelnet station"
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Name of this station, prepend \"(P)\" to protect this station:"
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid ""
+"What do you call this place here? Example: \"my first house\", \"mine\", "
+"\"shop\"..."
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Assign to network:"
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "You can have more than one network. If unsure, use \"@1\"."
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Owned by:"
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Unless you know what you are doing, leave this as is."
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Sort key:"
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Integer defining the order, the smaller the upper."
+msgstr ""
+
+#: src/gui_edit.lua
+msgid ""
+"To remove this travelnet, dig the node.\n"
+"The network is deleted after removing all associated travelnets."
+msgstr ""
+
+#: src/gui_edit.lua src/gui_setup.lua
+msgid "Save"
+msgstr ""
+
+#: src/gui_edit.lua
+msgid "Abort"
+msgstr ""
+
+#: src/gui_setup.lua
+msgid "Travelnet of the same name already exists"
+msgstr ""
+
+#: src/gui_setup.lua
+msgid "Configure this travelnet station"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Too fast!"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Travelnet @1: Position protected!"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Travelnet @1: You cannot exit from this tgravelnet!"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Teleporting to @1..."
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Travelnet @1: Not Found!"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "[HERE] @1"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "You are already at @1!"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Travelnet @1 is protected!"
+msgstr ""
+
+#: src/gui_tp.lua src/travelnet_api.lua
+msgid "This travelnet is orphaned. Please set up again."
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Setup"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Are you sure you want to detach this travelnet?"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Cancel"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Confirm"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Successfully detached travelnet \"@1\" at @2 from @3@@@4."
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Travelnet Teleport Interface"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Edit"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Detach"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Name of this travelnet: @1"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Network attached: @1@@@2 (#@3)"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Click or tap on the destion you want to go to."
+msgstr ""
+
+#: src/privs.lua
+msgid "Allows to attach travelnet boxes to travelnets of other players"
+msgstr ""
+
+#: src/privs.lua
+msgid "Allows to dig travelnet boxes which belog to nets of other players"
+msgstr ""
+
+#: src/teacher.lua
+msgid "Travelnets"
+msgstr ""
+
+#: src/teacher.lua
+msgid ""
+"Travelnets are devices providing instant transportation between distinct "
+"locations."
+msgstr ""
+
+#: src/teacher.lua
+msgid ""
+"To use a travelnet, right-click a configured travelnet and select a "
+"destination."
+msgstr ""
+
+#: src/teacher.lua
+msgid ""
+"In the interface of a travelnet, click or tap on the name of your desired "
+"destination."
+msgstr ""
+
+#: src/teacher.lua
+msgid ""
+"If the background is green, you are already in this travelnet. There is no "
+"point in teleporting there."
+msgstr ""
+
+#: src/teacher.lua
+msgid ""
+"If the background is red, the destination is protected. You cannot teleport "
+"there."
+msgstr ""
+
+#: src/teacher.lua
+msgid ""
+"To set up a travelnet, place down a new travelnet and right click it. Fill "
+"in the form, then click/tap save."
+msgstr ""
+
+#: src/teacher.lua
+msgid ""
+"To edit an existing travelnet, right click it then click/tap edit. To remove "
+"one, dig the travelnet."
+msgstr ""
+
+#: src/teacher.lua
+msgid ""
+"Prepend a travelnet's name with \"@1\" so others cannot teleport to this "
+"travelnet."
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "@1 Travelnet-Box"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Yellow"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Red"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Orange"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Blue"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Cyan"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Green"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Dark Green"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Violet"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Pink"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Magenta"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Brown"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Grey"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Dark Grey"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "Black"
+msgstr ""
+
+#: src/travelnet_register.lua
+msgid "White"
+msgstr ""
