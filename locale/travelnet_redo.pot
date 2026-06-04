@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: travelnet_redo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-04 14:08+0800\n"
+"POT-Creation-Date: 2026-06-04 15:00+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,6 +86,10 @@ msgid ""
 "Travelnet node database synchronized. (Restored @1, removed @2, used @3 ms)"
 msgstr ""
 
+#: src/crafts.lua
+msgid "Unprogrammed @1"
+msgstr ""
+
 #: src/db_api.lua src/gui_tp.lua src/travelnet_api.lua
 msgid "Unconfigured travelnet, rightclick/tap to configure"
 msgstr ""
@@ -114,19 +118,19 @@ msgstr ""
 msgid "You can't edit this travelnet."
 msgstr ""
 
-#: src/gui_edit.lua src/gui_setup.lua
+#: src/gui_edit.lua src/gui_setup.lua src/travelnet_api.lua
 msgid "Display name not given"
 msgstr ""
 
-#: src/gui_edit.lua src/gui_setup.lua
+#: src/gui_edit.lua src/gui_setup.lua src/travelnet_api.lua
 msgid "Network name not given"
 msgstr ""
 
-#: src/gui_edit.lua src/gui_setup.lua
+#: src/gui_edit.lua src/gui_setup.lua src/travelnet_api.lua
 msgid "Length of display name cannot exceed 40"
 msgstr ""
 
-#: src/gui_edit.lua src/gui_setup.lua
+#: src/gui_edit.lua src/gui_setup.lua src/travelnet_api.lua
 msgid "Length of network name cannot exceed 40"
 msgstr ""
 
@@ -134,7 +138,7 @@ msgstr ""
 msgid "Insufficant privilege to attach travelnets!"
 msgstr ""
 
-#: src/gui_edit.lua src/gui_setup.lua
+#: src/gui_edit.lua src/gui_setup.lua src/travelnet_api.lua
 msgid "Length of owner name cannot exceed 20"
 msgstr ""
 
@@ -198,15 +202,15 @@ msgstr ""
 msgid "Abort"
 msgstr ""
 
-#: src/gui_setup.lua
+#: src/gui_setup.lua src/travelnet_api.lua
 msgid "Insufficant privilege to attach travelnets to other players' networks"
 msgstr ""
 
-#: src/gui_setup.lua
+#: src/gui_setup.lua src/travelnet_api.lua
 msgid "Invalid sorting key"
 msgstr ""
 
-#: src/gui_setup.lua
+#: src/gui_setup.lua src/travelnet_api.lua
 msgid "Travelnet of the same name already exists"
 msgstr ""
 
@@ -276,6 +280,18 @@ msgstr ""
 
 #: src/gui_tp.lua
 msgid "Edit"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Pick up"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Position protected!"
+msgstr ""
+
+#: src/gui_tp.lua
+msgid "Failed to get travelnet data. Please try again."
 msgstr ""
 
 #: src/gui_tp.lua
@@ -352,6 +368,30 @@ msgstr ""
 msgid ""
 "Prepend a travelnet's name with \"@1\" so others cannot teleport to this "
 "travelnet."
+msgstr ""
+
+#: src/travelnet_api.lua
+msgid "Pre-programmed @1"
+msgstr ""
+
+#: src/travelnet_api.lua
+msgid "To un-program this travelnet item, place it into the crafting grid."
+msgstr ""
+
+#: src/travelnet_api.lua
+msgid "Display name: @1"
+msgstr ""
+
+#: src/travelnet_api.lua
+msgid "Network: @1@@@2"
+msgstr ""
+
+#: src/travelnet_api.lua
+msgid "Sorting key: @1"
+msgstr ""
+
+#: src/travelnet_api.lua
+msgid "Failed to place down pre-programmed travelnet: @1"
 msgstr ""
 
 #: src/travelnet_register.lua

@@ -362,6 +362,8 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
     local errmsg = ctx.errmsg
     ctx.errmsg = nil
 
+    local can_edit = pos and travelnet_redo.can_edit_travelnet(pos, name) and true or false
+
     return gui.VBox {
         min_w = 18, min_h = 11.5,
         gui.HBox {
@@ -389,7 +391,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                     })
                 end,
             },
-            pos and travelnet_redo.can_edit_travelnet(pos, name) and gui.Button {
+            can_edit and gui.Button {
                 w = 1, h = 0.8,
                 label = S("Edit"),
                 on_event = function(e_player, e_ctx)
@@ -404,7 +406,39 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                     _int.show_on_next_step(e_player, travelnet_redo.gui_edit, { pos = e_ctx.pos })
                 end,
             } or gui.Nil {},
-            pos and travelnet_redo.can_edit_travelnet(pos, name) and gui.Button {
+            can_edit and gui.Button {
+                w = 1, h = 0.8,
+                label = S("Pick up"),
+                on_event = function(e_player, e_ctx)
+                    local e_name = e_player:get_player_name()
+                    if not travelnet_redo.can_edit_travelnet(e_ctx.pos, e_name) then
+                        ctx.errmsg = core.get_color_escape_sequence("red") ..
+                            S("You can't edit this travelnet.")
+                        return true
+                    end
+
+                    -- This is a destructive action, so we check for protection too
+                    if core.is_protected(e_ctx.pos, e_name) then
+                        core.record_protection_violation(e_ctx.pos, e_name)
+                        ctx.errmsg = core.get_color_escape_sequence("red") ..
+                            S("Position protected!")
+                        return true
+                    end
+
+                    local preprog_stack = travelnet_redo.get_preprog_stack_from_pos(e_ctx.pos)
+                    if not preprog_stack then
+                        ctx.errmsg = core.get_color_escape_sequence("red") ..
+                            S("Failed to get travelnet data. Please try again.")
+                        return true
+                    end
+
+                    travelnet_redo.gui_tp:close(e_player)
+
+                    core.set_node(e_ctx.pos, { name = "air" })
+                    core.handle_node_drops(e_ctx.pos, { preprog_stack }, e_player)
+                end,
+            } or gui.Nil {},
+            can_edit and gui.Button {
                 w = 1, h = 0.8,
                 label = S("Detach"),
                 on_event = function(e_player, e_ctx)
