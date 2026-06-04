@@ -397,7 +397,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                 on_event = function(e_player, e_ctx)
                     local e_name = e_player:get_player_name()
                     if not travelnet_redo.can_edit_travelnet(e_ctx.pos, e_name) then
-                        ctx.errmsg = core.get_color_escape_sequence("red") ..
+                        e_ctx.errmsg = core.get_color_escape_sequence("red") ..
                             S("You can't edit this travelnet.")
                         return true
                     end
@@ -412,7 +412,7 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                 on_event = function(e_player, e_ctx)
                     local e_name = e_player:get_player_name()
                     if not travelnet_redo.can_edit_travelnet(e_ctx.pos, e_name) then
-                        ctx.errmsg = core.get_color_escape_sequence("red") ..
+                        e_ctx.errmsg = core.get_color_escape_sequence("red") ..
                             S("You can't edit this travelnet.")
                         return true
                     end
@@ -420,14 +420,14 @@ travelnet_redo.gui_tp = flow.make_gui(function(player, ctx)
                     -- This is a destructive action, so we check for protection too
                     if core.is_protected(e_ctx.pos, e_name) then
                         core.record_protection_violation(e_ctx.pos, e_name)
-                        ctx.errmsg = core.get_color_escape_sequence("red") ..
+                        e_ctx.errmsg = core.get_color_escape_sequence("red") ..
                             S("Position protected!")
                         return true
                     end
 
                     local preprog_stack = travelnet_redo.get_preprog_stack_from_pos(e_ctx.pos)
                     if not preprog_stack then
-                        ctx.errmsg = core.get_color_escape_sequence("red") ..
+                        e_ctx.errmsg = core.get_color_escape_sequence("red") ..
                             S("Failed to get travelnet data. Please try again.")
                         return true
                     end
