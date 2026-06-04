@@ -70,13 +70,13 @@ local function on_save(player, ctx)
         ctx.errmsg = S("Length of network name cannot exceed 40")
         return true
     elseif network_owner ~= name and not core.check_player_privs(name, { travelnet_attach = true }) then
-        ctx.errmsg = S("Insufficant privilege to attach travelnets!")
+        ctx.errmsg = S("Insufficant privilege to attach travelnets to other players' networks")
         return true
     elseif string.len(network_owner) > 20 then
         ctx.errmsg = S("Length of owner name cannot exceed 20")
         return true
     elseif not sort_key or sort_key < -32768 or sort_key > 32767 then
-        ctx.errmsg = S("Invalid sorting key!")
+        ctx.errmsg = S("Invalid sorting key")
         return true
     end
 

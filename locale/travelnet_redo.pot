@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: travelnet_redo\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-26 11:05+0800\n"
+"POT-Creation-Date: 2026-06-04 14:08+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -130,7 +130,7 @@ msgstr ""
 msgid "Length of network name cannot exceed 40"
 msgstr ""
 
-#: src/gui_edit.lua src/gui_setup.lua
+#: src/gui_edit.lua
 msgid "Insufficant privilege to attach travelnets!"
 msgstr ""
 
@@ -138,7 +138,7 @@ msgstr ""
 msgid "Length of owner name cannot exceed 20"
 msgstr ""
 
-#: src/gui_edit.lua src/gui_setup.lua
+#: src/gui_edit.lua
 msgid "Invalid sorting key!"
 msgstr ""
 
@@ -196,6 +196,14 @@ msgstr ""
 
 #: src/gui_edit.lua
 msgid "Abort"
+msgstr ""
+
+#: src/gui_setup.lua
+msgid "Insufficant privilege to attach travelnets to other players' networks"
+msgstr ""
+
+#: src/gui_setup.lua
+msgid "Invalid sorting key"
 msgstr ""
 
 #: src/gui_setup.lua
