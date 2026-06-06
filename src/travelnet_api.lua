@@ -247,10 +247,6 @@ local function add_or_run_after(tb, key, func)
     end
 end
 
-if core.global_exists("mesecons") then
-    mesecon.register_mvps_stopper("travelnet_redo:placeholder")
-end
-
 function travelnet_redo.register_travelnet(name, def)
     def = table.copy(def)
 
@@ -268,7 +264,7 @@ function travelnet_redo.register_travelnet(name, def)
 
     core.register_node(name, def)
 
-    if core.global_exists("mesecons") then
+    if core.global_exists("mesecons_mvps") then
         mesecon.register_mvps_stopper(name)
     end
 end

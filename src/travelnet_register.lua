@@ -44,6 +44,10 @@ local placeholder_box = {
 }
 local placeholder_registered = {}
 
+if core.global_exists("mesecons_mvps") then
+    mesecon.register_mvps_stopper("travelnet_redo:placeholder")
+end
+
 core.register_lbm({
     label = "Replace old Travelnet placeholders",
     name = "travelnet_redo:replace_old_placeholder",
@@ -103,6 +107,9 @@ function travelnet_redo.register_boxlike_travelnet(name, def)
             collision_box = placeholder_box,
             sounds = xcompat.sounds.node_sound_glass_defaults(),
         })
+        if core.global_exists("mesecons_mvps") then
+            mesecon.register_mvps_stopper(placeholder_name)
+        end
     end
 
     local reg_def = {
